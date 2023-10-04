@@ -65,6 +65,7 @@ const new_routes = [
 ]
 
 const routes = [
+  ...old_routes,
   ...new_routes,
   {
     type: 'collapse',

@@ -1,21 +1,20 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 // react-router components
-import { useLocation, Link } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 // prop-types is a library for typechecking of props.
 import PropTypes from 'prop-types'
 
 // @material-ui core components
 import AppBar from '@mui/material/AppBar'
-import Toolbar from '@mui/material/Toolbar'
+import Icon from '@mui/material/Icon'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
-import Icon from '@mui/material/Icon'
+import Toolbar from '@mui/material/Toolbar'
 
 // React components
 import MDBox from 'components/MDBox'
-import MDInput from 'components/MDInput'
 
 // React example components
 import Breadcrumbs from 'examples/Breadcrumbs'
@@ -25,18 +24,13 @@ import NotificationItem from 'examples/Items/NotificationItem'
 import {
   navbar,
   navbarContainer,
-  navbarRow,
   navbarIconButton,
   navbarMobileMenu,
+  navbarRow,
 } from 'examples/Navbars/DashboardNavbar/styles'
 
 // React context
-import {
-  useMaterialUIController,
-  setTransparentNavbar,
-  setMiniSidenav,
-  // setOpenConfigurator,
-} from 'context'
+import { setMiniSidenav, setTransparentNavbar, useMaterialUIController } from 'context'
 
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState()
@@ -120,9 +114,9 @@ function DashboardNavbar({ absolute, light, isMini }) {
         </MDBox>
         {isMini ? null : (
           <MDBox sx={(theme) => navbarRow(theme, { isMini })}>
-            <MDBox pr={1}>
+            {/* <MDBox pr={1}>
               <MDInput label="Search here" />
-            </MDBox>
+            </MDBox> */}
             <MDBox color={light ? 'white' : 'inherit'}>
               {/* <Link to="/authentication/sign-in/basic">
                 <IconButton sx={navbarIconButton} size="small" disableRipple>

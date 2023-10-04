@@ -6,8 +6,9 @@
 - [Sign In](https://demos.creative-tim.com/material-dashboard-react/#/authentication/sign-in?ref=readme-sudr)
 - [Sign Up](https://demos.creative-tim.com/material-dashboard-react/#/authentication/sign-up?ref=readme-sudr)
 
-[View More](https://demos.creative-tim.com/material-dashboard-react/#/dashboard?ref=readme-mdr).
+- [View More](https://demos.creative-tim.com/material-dashboard-react/#/dashboard?ref=readme-mdr).
 
+- [Original Link](https://github.com/creativetimofficial/material-dashboard-react)
 ## Terminal Commands
 
 1. Download and Install NodeJs LTS version from [NodeJs Official Page](https://nodejs.org/en/download/).
