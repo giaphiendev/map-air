@@ -1,6 +1,7 @@
 // React layouts
 // import Dashboard from 'layouts/dashboard'
 import UserManagement from 'pages/user-management'
+import NewsManagement from 'pages/NewsManagement'
 // import Tables from 'layouts/tables'
 // import Billing from 'layouts/billing'
 // import Notifications from 'layouts/notifications'
@@ -61,6 +62,14 @@ const new_routes = [
     icon: <Icon fontSize="small">person</Icon>,
     route: '/user-management',
     component: <UserManagement />,
+  },
+  {
+    type: 'collapse',
+    name: 'News',
+    key: 'news-management',
+    icon: <Icon fontSize="small">newspaper</Icon>,
+    route: '/news-management',
+    component: <NewsManagement />,
   },
 ]
 

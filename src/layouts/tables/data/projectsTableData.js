@@ -128,6 +128,13 @@ export default function data() {
       ],
     ],
 
+    list_role: [
+      { id: 1, name: 'Super admin' },
+      { id: 2, name: 'Admin' },
+      { id: 3, name: 'User' },
+      { id: 4, name: 'Anonymous' },
+    ],
+
     columns: [
       { Header: 'project', accessor: 'project', width: '30%', align: 'left' },
       { Header: 'budget', accessor: 'budget', align: 'left' },

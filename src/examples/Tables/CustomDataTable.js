@@ -82,8 +82,6 @@ function CustomDataTable({ rows, cols }) {
   }
 
   const handMenuItem = (type) => {
-    console.log('type: ', type)
-    console.log('itemActive: ', itemActive)
     handleClose()
   }
   return (
