@@ -27,6 +27,7 @@ import MDBox from 'components/MDBox'
 import MDButton from 'components/MDButton'
 import MDInput from 'components/MDInput'
 import MDTypography from 'components/MDTypography'
+import axiosInstance from 'services/axios'
 
 const DATA_DEMO = [
   {
@@ -176,7 +177,7 @@ const RenderNews = ({ list_news, handleOpenDialog, setActiveItem }) => {
 
 const ControlFilter = ({ dataFilter, setDataFilter, handleOpenDialog, submitSearch }) => {
   return (
-    <MDBox pt={6} pb={3}>
+    <MDBox pt={2} pb={2}>
       <Grid container spacing={6}>
         <Grid item xs={12} sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
           <Box sx={{ display: 'flex' }}>
@@ -234,16 +235,58 @@ const ControlFilter = ({ dataFilter, setDataFilter, handleOpenDialog, submitSear
 const DialogUpdateBlog = ({ activeItem, isOpen, handleClose, handleSubmit }) => {
   const [files, setFiles] = useState([])
   const [formData, setFormData] = useState({ title: '', subtitle: '', description: '' })
+  const [formError, setFormError] = useState({
+    title: false,
+    subtitle: false,
+    description: false,
+    file: false,
+  })
 
   useEffect(() => {
     if (activeItem) {
       setFormData({ ...activeItem })
+      setFormError({
+        title: false,
+        subtitle: false,
+        description: false,
+        file: false,
+      })
     }
   }, [activeItem])
 
   const internalSubmit = () => {
     // validate
+    let temp = {
+      title: false,
+      subtitle: false,
+      description: false,
+      file: false,
+    }
+    if (files.length <= 0) {
+      temp.file = true
+    }
+    for (const [key, val] of Object.entries(formData)) {
+      if (!!!val) {
+        temp[key] = true
+      }
+    }
+
+    let lCheck = Object.values(temp).filter((e) => !!e)
+    if (lCheck.length > 0) {
+      setFormError(temp)
+      return
+    }
     handleSubmit({ ...formData, file: files })
+  }
+
+  const handleCloseInternal = () => {
+    setFormError({
+      title: false,
+      subtitle: false,
+      description: false,
+      file: false,
+    })
+    handleClose()
   }
 
   return (
@@ -251,7 +294,7 @@ const DialogUpdateBlog = ({ activeItem, isOpen, handleClose, handleSubmit }) => 
       open={isOpen}
       maxWidth="md"
       fullWidth
-      onClose={handleClose}
+      onClose={handleCloseInternal}
       scroll="paper"
       aria-labelledby="scroll-dialog-title"
       aria-describedby="scroll-dialog-description"
@@ -265,6 +308,7 @@ const DialogUpdateBlog = ({ activeItem, isOpen, handleClose, handleSubmit }) => 
             variant="outlined"
             value={formData?.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            error={formError.title}
           />
         </MDBox>
         <MDBox sx={{ width: '100%', mt: 2 }}>
@@ -274,6 +318,7 @@ const DialogUpdateBlog = ({ activeItem, isOpen, handleClose, handleSubmit }) => 
             variant="outlined"
             value={formData?.subtitle}
             onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
+            error={formError.subtitle}
           />
         </MDBox>
         <MDBox sx={{ width: '100%', mt: 2 }}>
@@ -286,6 +331,7 @@ const DialogUpdateBlog = ({ activeItem, isOpen, handleClose, handleSubmit }) => 
             rows={5}
             value={formData?.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            error={formError.description}
           />
         </MDBox>
         {/*  */}
@@ -296,17 +342,25 @@ const DialogUpdateBlog = ({ activeItem, isOpen, handleClose, handleSubmit }) => 
           <FileUpload
             title="Drag or drop some files here"
             multiple={false}
-            // accept={['img', 'png', 'image', 'pdf']}
+            accept={['image/*']}
             value={files}
             onChange={setFiles}
             buttonProps={{ variant: 'contained', sx: { color: '#fff' } }}
             buttonText="Upload image"
             maxFiles={1}
+            sx={
+              formError.file && {
+                borderColor: 'red',
+                '&:hover': {
+                  borderColor: 'red',
+                },
+              }
+            }
           />
         </MDBox>
       </DialogContent>
       <DialogActions>
-        <Button color="secondary" onClick={handleClose}>
+        <Button color="secondary" onClick={handleCloseInternal}>
           Cancel
         </Button>
         <Button onClick={internalSubmit}>Submit</Button>
@@ -317,19 +371,53 @@ const DialogUpdateBlog = ({ activeItem, isOpen, handleClose, handleSubmit }) => 
 
 const NewsManagement = () => {
   const [paginator, setPaginator] = useState({ total: 10, current: 1 })
-
+  const [listBlog, setListBlog] = useState([])
   const [openDialog, setOpenDialog] = useState(false)
   const [activeItem, setActiveItem] = useState(null)
   const [dataFilter, setDataFilter] = useState({ keySearch: '', sortByDate: 1, limitBlog: 2 })
+
+  useEffect(() => {
+    // initValue
+    fetchListBlog()
+  }, [])
+
+  const fetchListBlog = () => {
+    axiosInstance
+      .get('api/tintuc')
+      .then((res) => {
+        const data = res.data
+        // console.log('data res: ', data.data.tinTucs)
+        setListBlog(DATA_DEMO)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+  }
 
   const handleCloseDialog = () => {
     setOpenDialog(false)
     setActiveItem(null)
   }
   const handleSubmitDialog = (data) => {
-    console.log('data submit: ', data)
-    handleCloseDialog()
+    var bodyFormData = new FormData()
+    bodyFormData.append('anhdaidien', data.file)
+    bodyFormData.append('tieude', data.title)
+    bodyFormData.append('tieudecon', data.subtitle)
+    bodyFormData.append('chitiet', data.description)
+    bodyFormData.append('luotxem', 1)
+
+    axiosInstance
+      .post('api/tintuc', bodyFormData, { headers: { 'Content-Type': 'multipart/form-data' } })
+      .then((res) => {
+        // const data = res.data
+        // console.log('data res: ', data)
+        handleCloseDialog()
+      })
+      .catch((e) => {
+        console.log(e)
+      })
   }
+
   const handleOpenDialog = () => {
     setOpenDialog(true)
   }
@@ -354,7 +442,7 @@ const NewsManagement = () => {
       />
 
       <RenderNews
-        list_news={DATA_DEMO}
+        list_news={listBlog}
         handleOpenDialog={handleOpenDialog}
         setActiveItem={setActiveItem}
       />

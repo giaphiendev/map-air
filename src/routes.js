@@ -1,26 +1,37 @@
 // React layouts
-// import Dashboard from 'layouts/dashboard'
-import UserManagement from 'pages/user-management'
+import Dashboard from 'layouts/dashboard'
+import DocumentManagement from 'pages/DocumentManagement'
+import MapDataClass from 'pages/MapDataClass'
+import MapDataClassCategory from 'pages/MapDataClass/category'
 import NewsManagement from 'pages/NewsManagement'
+import PDFMap from 'pages/PDFMap'
+import SatelliteImage from 'pages/SatelliteImage'
+import FeedBack from 'pages/feedback'
+import UserManagement from 'pages/user-management'
 // import Tables from 'layouts/tables'
 // import Billing from 'layouts/billing'
 // import Notifications from 'layouts/notifications'
 // import Profile from 'layouts/profile'
-import SignIn from 'layouts/authentication/sign-in'
-import SignUp from 'layouts/authentication/sign-up'
+// import SignIn from 'layouts/authentication/sign-in'
+// import SignUp from 'layouts/authentication/sign-up'
 
 // @mui icons
+import CategoryIcon from '@mui/icons-material/Category'
+import FeedbackIcon from '@mui/icons-material/Feedback'
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf'
+import SatelliteAltIcon from '@mui/icons-material/SatelliteAlt'
+import TextSnippetIcon from '@mui/icons-material/TextSnippet'
 import Icon from '@mui/material/Icon'
 
 const old_routes = [
-  // {
-  //   type: 'collapse',
-  //   name: 'Dashboard',
-  //   key: 'dashboard',
-  //   icon: <Icon fontSize="small">dashboard</Icon>,
-  //   route: '/dashboard',
-  //   component: <Dashboard />,
-  // },
+  {
+    type: 'collapse',
+    name: 'Dashboard',
+    key: 'dashboard',
+    icon: <Icon fontSize="small">dashboard</Icon>,
+    route: '/dashboard',
+    component: <Dashboard />,
+  },
   // {
   //   type: 'collapse',
   //   name: 'Tables',
@@ -71,27 +82,75 @@ const new_routes = [
     route: '/news-management',
     component: <NewsManagement />,
   },
+  {
+    type: 'collapse',
+    name: 'Document',
+    key: 'document-management',
+    icon: <TextSnippetIcon fontSize="small" />,
+    route: '/document-management',
+    component: <DocumentManagement />,
+  },
+  {
+    type: 'collapse',
+    name: 'Map Data Class',
+    key: 'map-class',
+    icon: <CategoryIcon fontSize="small" />,
+    route: '/map-class',
+    component: <MapDataClass />,
+  },
+  {
+    type: 'collapse',
+    name: 'Map Data Class Category',
+    key: 'map-class-category',
+    icon: <CategoryIcon fontSize="small" />,
+    route: '/map-class-category',
+    component: <MapDataClassCategory />,
+  },
+  {
+    type: 'collapse',
+    name: 'PDF Map',
+    key: 'pdf-map',
+    icon: <PictureAsPdfIcon fontSize="small" />,
+    route: '/pdf-map',
+    component: <PDFMap />,
+  },
+  {
+    type: 'collapse',
+    name: 'Feedback',
+    key: 'feedback',
+    icon: <FeedbackIcon fontSize="small" />,
+    route: '/feedback',
+    component: <FeedBack />,
+  },
+  {
+    type: 'collapse',
+    name: 'Satellite Image',
+    key: 'satellite-image',
+    icon: <SatelliteAltIcon fontSize="small" />,
+    route: '/satellite-image',
+    component: <SatelliteImage />,
+  },
 ]
 
 const routes = [
   ...old_routes,
   ...new_routes,
-  {
-    type: 'collapse',
-    name: 'Sign In',
-    key: 'sign-in',
-    icon: <Icon fontSize="small">login</Icon>,
-    route: '/authentication/sign-in',
-    component: <SignIn />,
-  },
-  {
-    type: 'collapse',
-    name: 'Sign Up',
-    key: 'sign-up',
-    icon: <Icon fontSize="small">assignment</Icon>,
-    route: '/authentication/sign-up',
-    component: <SignUp />,
-  },
+  // {
+  //   type: 'collapse',
+  //   name: 'Sign In',
+  //   key: 'sign-in',
+  //   icon: <Icon fontSize="small">login</Icon>,
+  //   route: '/authentication/sign-in',
+  //   component: <SignIn />,
+  // },
+  // {
+  //   type: 'collapse',
+  //   name: 'Sign Up',
+  //   key: 'sign-up',
+  //   icon: <Icon fontSize="small">assignment</Icon>,
+  //   route: '/authentication/sign-up',
+  //   component: <SignUp />,
+  // },
 ]
 
 export default routes

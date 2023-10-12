@@ -2,25 +2,15 @@ import { useEffect } from 'react'
 
 // react-router-dom components
 import { useLocation, NavLink } from 'react-router-dom'
-
-// prop-types is a library for typechecking of props.
 import PropTypes from 'prop-types'
-
-// @mui material components
 import List from '@mui/material/List'
 import Divider from '@mui/material/Divider'
 import Link from '@mui/material/Link'
 import Icon from '@mui/material/Icon'
-
-// React components
+import LogoutIcon from '@mui/icons-material/Logout'
 import MDBox from 'components/MDBox'
 import MDTypography from 'components/MDTypography'
-import MDButton from 'components/MDButton'
-
-// React example components
 import SidenavCollapse from 'examples/Sidenav/SidenavCollapse'
-
-// Custom styles for the Sidenav
 import SidenavRoot from 'examples/Sidenav/SidenavRoot'
 import sidenavLogoLabel from 'examples/Sidenav/styles/sidenav'
 
@@ -31,8 +21,14 @@ import {
   setTransparentSidenav,
   setWhiteSidenav,
 } from 'context'
+import { Box } from '@mui/material'
+import Cookies from 'js-cookie'
+import { setIsAuth, useAuthContextController } from 'context/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
+  const navigate = useNavigate()
+  const [controllerAuth, dispatchAuth] = useAuthContextController()
   const [controller, dispatch] = useMaterialUIController()
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = controller
   const location = useLocation()
@@ -124,6 +120,16 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     return returnValue
   })
 
+  const handleLogout = () => {
+    // clear localStorage, cookie, change isAuth
+    Cookies.remove('_token_')
+    localStorage.removeItem('meData')
+    // set context AuthContext
+    setIsAuth(dispatchAuth, false)
+    // go to another page
+    navigate('/authentication/sign-in')
+  }
+
   return (
     <SidenavRoot
       {...rest}
@@ -162,7 +168,12 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           (darkMode && !transparentSidenav && whiteSidenav)
         }
       />
-      <List>{renderRoutes}</List>
+      <List>
+        {renderRoutes}
+        <Box onClick={handleLogout}>
+          <SidenavCollapse name={'Logout'} icon={<LogoutIcon />} />
+        </Box>
+      </List>
     </SidenavRoot>
   )
 }

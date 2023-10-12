@@ -1,40 +1,27 @@
-import { useEffect, useState } from 'react'
-
-// react-router components
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
-
-// @mui material components
 import CssBaseline from '@mui/material/CssBaseline'
 import Icon from '@mui/material/Icon'
 import { ThemeProvider } from '@mui/material/styles'
-
-// Material Dashboard 2// React components
-import MDBox from 'components/MDBox'
-
-// Material Dashboard 2// React example components
-import Configurator from 'examples/Configurator'
-import Sidenav from 'examples/Sidenav'
-
-// Material Dashboard 2// React themes
-import theme from 'assets/theme'
-
-// Material Dashboard 2// React Dark Mode themes
-import themeDark from 'assets/theme-dark'
-
-// RTL plugins
-
-// Material Dashboard 2// React routes
-import routes from 'routes'
-
-// Material Dashboard 2// React contexts
-import { setMiniSidenav, setOpenConfigurator, useMaterialUIController } from 'context'
-
-// Images
 import brandDark from 'assets/images/logo-ct-dark.png'
 import brandWhite from 'assets/images/logo-ct.png'
+import theme from 'assets/theme'
+import themeDark from 'assets/theme-dark'
+import MDBox from 'components/MDBox'
+import { setMiniSidenav, setOpenConfigurator, useMaterialUIController } from 'context'
+import { useAuthContextController } from 'context/AuthContext'
+import Configurator from 'examples/Configurator'
+import Sidenav from 'examples/Sidenav'
+import SignIn from 'layouts/authentication/sign-in'
+import SignUp from 'layouts/authentication/sign-up'
+import { useEffect, useState } from 'react'
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import routes from 'routes'
+
+const WHITELIST_ROUTE = ['/authentication/sign-in', '/authentication/sign-up']
 
 export default function App() {
+  const navigate = useNavigate()
   const [controller, dispatch] = useMaterialUIController()
+  const [controllerAuth, dispatchAuth] = useAuthContextController()
   const {
     miniSidenav,
     layout,
@@ -44,6 +31,9 @@ export default function App() {
     whiteSidenav,
     darkMode,
   } = controller
+
+  const { isAuth } = controllerAuth
+
   const [onMouseEnter, setOnMouseEnter] = useState(false)
   const { pathname } = useLocation()
 
@@ -70,7 +60,15 @@ export default function App() {
   useEffect(() => {
     document.documentElement.scrollTop = 0
     document.scrollingElement.scrollTop = 0
-  }, [pathname])
+
+    if (WHITELIST_ROUTE.includes(pathname)) {
+      if (isAuth) navigate('/user-management')
+    }
+
+    if (!WHITELIST_ROUTE.includes(pathname)) {
+      if (!isAuth) navigate('/authentication/sign-in')
+    }
+  }, [pathname, isAuth])
 
   const getRoutes = (allRoutes) =>
     allRoutes.map((route) => {
@@ -117,7 +115,7 @@ export default function App() {
           <Sidenav
             color={sidenavColor}
             brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-            brandName="Map air"
+            brandName="Air map"
             routes={routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
@@ -128,8 +126,10 @@ export default function App() {
       )}
       {layout === 'vr' && <Configurator />}
       <Routes>
-        {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/user-management" />} />
+        {isAuth && getRoutes(routes)}
+        <Route exact path="/authentication/sign-in" element={<SignIn />} />
+        <Route exact path="/authentication/sign-up" element={<SignUp />} />
+        <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
       </Routes>
     </ThemeProvider>
   )

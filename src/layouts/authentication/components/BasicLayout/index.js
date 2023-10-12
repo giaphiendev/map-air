@@ -21,6 +21,8 @@ function BasicLayout({ image, children }) {
           label: 'Hello my friend',
           color: 'dark',
         }}
+        transparent
+        light
       />
       <MDBox
         position="absolute"
