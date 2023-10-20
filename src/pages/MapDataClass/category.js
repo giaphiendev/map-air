@@ -66,9 +66,9 @@ const CustomDataTable = ({ data, handleOpenDialog, setActiveItem }) => {
         <MDBox component="thead">
           <TableRow>
             <MyHeadCell align="center">ID</MyHeadCell>
-            <MyHeadCell align="center">Title</MyHeadCell>
-            <MyHeadCell align="center">Created Date</MyHeadCell>
-            <MyHeadCell align="center">Action</MyHeadCell>
+            <MyHeadCell align="center">Tiêu đề</MyHeadCell>
+            <MyHeadCell align="center">Ngày tạo</MyHeadCell>
+            <MyHeadCell align="center">Hành động</MyHeadCell>
           </TableRow>
         </MDBox>
         <TableBody>
@@ -118,23 +118,23 @@ const ControlFilter = ({ dataFilter, setDataFilter, handleOpenDialog, submitSear
             <MDBox pr={1} sx={{ width: '300px' }}>
               <MDInput
                 sx={{ width: '100%' }}
-                label="Looking...."
+                label="Nhập tìm kiếm...."
                 value={dataFilter.keySearch}
                 onChange={(e) => setDataFilter({ ...dataFilter, keySearch: e.target.value })}
               />
             </MDBox>
 
-            <Box sx={{ width: '100px', mx: 1 }}>
+            <Box sx={{ width: '150px', mx: 1 }}>
               <FormControl fullWidth>
                 <TextField
                   select
-                  label="Sort by name"
+                  label="Sắp xếp theo tên"
                   onChange={(e) => setDataFilter({ ...dataFilter, sortByDate: e.target.value })}
                   value={dataFilter.sortByDate}
                   className="custom-text-select"
                 >
-                  <MenuItem value={1}>Descending</MenuItem>
-                  <MenuItem value={2}>Ascending</MenuItem>
+                  <MenuItem value={1}>Giảm dần</MenuItem>
+                  <MenuItem value={2}>Tăng dần</MenuItem>
                 </TextField>
               </FormControl>
             </Box>
@@ -142,7 +142,7 @@ const ControlFilter = ({ dataFilter, setDataFilter, handleOpenDialog, submitSear
               <FormControl fullWidth>
                 <TextField
                   select
-                  label="Limit blog"
+                  label="Giới hạn"
                   onChange={(e) => setDataFilter({ ...dataFilter, limitBlog: e.target.value })}
                   value={dataFilter.limitBlog}
                   className="custom-text-select"
@@ -154,11 +154,11 @@ const ControlFilter = ({ dataFilter, setDataFilter, handleOpenDialog, submitSear
               </FormControl>
             </Box>
             <MDButton variant="outlined" color="primary" onClick={submitSearch}>
-              Seach
+              Tìm kiếm
             </MDButton>
           </Box>
           <MDButton variant="outlined" color="primary" onClick={handleOpenDialog}>
-            Add new paper
+            Thêm mới
           </MDButton>
         </Grid>
       </Grid>
@@ -287,7 +287,7 @@ const MapDataClassCategory = () => {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  Map Data Class Category
+                  Danh mục lớp dữ liệu bản đồ
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>

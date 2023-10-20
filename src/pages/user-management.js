@@ -110,11 +110,11 @@ function CustomDataTable({ dataRows, handleOpenDialog, setActiveItem }) {
             <MyHeadCell width={'10%'} align={'left'}>
               ID
             </MyHeadCell>
-            <MyHeadCell align={'left'}>Image</MyHeadCell>
+            <MyHeadCell align={'left'}>Ảnh</MyHeadCell>
             <MyHeadCell align={'center'}>Email</MyHeadCell>
-            <MyHeadCell align={'center'}>User Name</MyHeadCell>
-            <MyHeadCell align={'center'}>Role</MyHeadCell>
-            <MyHeadCell align={'center'}>Action</MyHeadCell>
+            <MyHeadCell align={'center'}>Tên người dùng</MyHeadCell>
+            <MyHeadCell align={'center'}>Vai trò</MyHeadCell>
+            <MyHeadCell align={'center'}>Hành động</MyHeadCell>
           </TableRow>
         </MDBox>
         <TableBody>
@@ -352,18 +352,18 @@ function UserManagement() {
               <MDBox pr={1} sx={{ width: '300px' }}>
                 <TextField
                   sx={{ width: '100%' }}
-                  label="Search here"
+                  label="Nhập tìm kiếm"
                   autoComplete="off"
                   value={dataFilter.searchText}
                   onChange={(e) => setDataFilter({ ...dataFilter, searchText: e.target.value })}
                 />
               </MDBox>
               <MDButton variant="outlined" color="primary" onClick={submitSearch}>
-                Seach
+                Tìm kiếm
               </MDButton>
             </Box>
             <MDButton variant="outlined" color="primary" onClick={handleOpenDialog}>
-              Add new user
+              Thêm người dùng
             </MDButton>
           </Grid>
           <Grid item xs={12}>
@@ -379,7 +379,7 @@ function UserManagement() {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  Users Table
+                  Danh sách người dùng
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>

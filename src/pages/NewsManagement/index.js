@@ -184,23 +184,23 @@ const ControlFilter = ({ dataFilter, setDataFilter, handleOpenDialog, submitSear
             <MDBox pr={1} sx={{ width: '300px' }}>
               <MDInput
                 sx={{ width: '100%' }}
-                label="Looking...."
+                label="Nhập tìm kiếm...."
                 value={dataFilter.keySearch}
                 onChange={(e) => setDataFilter({ ...dataFilter, keySearch: e.target.value })}
               />
             </MDBox>
 
-            <Box sx={{ width: '100px', mx: 1 }}>
+            <Box sx={{ width: '150px', mx: 1 }}>
               <FormControl fullWidth>
                 <TextField
                   select
-                  label="Sort by date"
+                  label="Sắp xếp theo thời gian"
                   onChange={(e) => setDataFilter({ ...dataFilter, sortByDate: e.target.value })}
                   value={dataFilter.sortByDate}
                   className="custom-text-select"
                 >
-                  <MenuItem value={1}>Descending</MenuItem>
-                  <MenuItem value={2}>Ascending</MenuItem>
+                  <MenuItem value={1}>Giảm dần</MenuItem>
+                  <MenuItem value={2}>Tăng dần</MenuItem>
                 </TextField>
               </FormControl>
             </Box>
@@ -208,7 +208,7 @@ const ControlFilter = ({ dataFilter, setDataFilter, handleOpenDialog, submitSear
               <FormControl fullWidth>
                 <TextField
                   select
-                  label="Limit blog"
+                  label="Giới hạn"
                   onChange={(e) => setDataFilter({ ...dataFilter, limitBlog: e.target.value })}
                   value={dataFilter.limitBlog}
                   className="custom-text-select"
@@ -220,11 +220,11 @@ const ControlFilter = ({ dataFilter, setDataFilter, handleOpenDialog, submitSear
               </FormControl>
             </Box>
             <MDButton variant="outlined" color="primary" onClick={submitSearch}>
-              Seach
+              Tìm kiếm
             </MDButton>
           </Box>
           <MDButton variant="outlined" color="primary" onClick={handleOpenDialog}>
-            Add new paper
+            Thêm mới
           </MDButton>
         </Grid>
       </Grid>

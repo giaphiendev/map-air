@@ -40,9 +40,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import dayjs from 'dayjs'
 
 const STATUS_FEEDBACK = {
-  1: 'Approved',
-  2: 'Waitting',
-  3: 'Reject',
+  1: 'Đã duyệt',
+  2: 'Đang chờ',
+  3: 'Từ chối',
 }
 
 const dataDemo = () => {
@@ -101,11 +101,11 @@ const CustomDataTable = ({ data, handleOpenDialog, setActiveItem }) => {
             <MyHeadCell width="5%" align="left">
               ID
             </MyHeadCell>
-            <MyHeadCell align="center">User</MyHeadCell>
-            <MyHeadCell align="center">Title</MyHeadCell>
-            <MyHeadCell align="center">Status</MyHeadCell>
-            <MyHeadCell align="center">Date</MyHeadCell>
-            <MyHeadCell align="center">Action</MyHeadCell>
+            <MyHeadCell align="center">Người tạo</MyHeadCell>
+            <MyHeadCell align="center">Tiêu đề</MyHeadCell>
+            <MyHeadCell align="center">Trạng thái</MyHeadCell>
+            <MyHeadCell align="center">Thời gian</MyHeadCell>
+            <MyHeadCell align="center">Hành động</MyHeadCell>
           </TableRow>
         </MDBox>
         <TableBody>
@@ -159,7 +159,7 @@ const ControlFilter = ({ dataFilter, setDataFilter, submitSearch }) => {
               <FormControl fullWidth>
                 <TextField
                   select
-                  label="classify status"
+                  label="Phân loại trạng thái"
                   onChange={(e) => setDataFilter({ ...dataFilter, classifyStatus: e.target.value })}
                   value={dataFilter.classifyStatus}
                   className="custom-text-select"
@@ -173,17 +173,17 @@ const ControlFilter = ({ dataFilter, setDataFilter, submitSearch }) => {
                 </TextField>
               </FormControl>
             </Box>
-            <Box sx={{ width: '100px', mx: 1 }}>
+            <Box sx={{ width: '150px', mx: 1 }}>
               <FormControl fullWidth>
                 <TextField
                   select
-                  label="Sort by date"
+                  label="Sắp xếp theo thời gian"
                   onChange={(e) => setDataFilter({ ...dataFilter, sortByDate: e.target.value })}
                   value={dataFilter.sortByDate}
                   className="custom-text-select"
                 >
-                  <MenuItem value={1}>Descending</MenuItem>
-                  <MenuItem value={2}>Ascending</MenuItem>
+                  <MenuItem value={1}>Giảm dần</MenuItem>
+                  <MenuItem value={2}>Tăng dần</MenuItem>
                 </TextField>
               </FormControl>
             </Box>
@@ -191,7 +191,7 @@ const ControlFilter = ({ dataFilter, setDataFilter, submitSearch }) => {
               <FormControl fullWidth>
                 <TextField
                   select
-                  label="Limit blog"
+                  label="Giới hạn"
                   onChange={(e) => setDataFilter({ ...dataFilter, limitBlog: e.target.value })}
                   value={dataFilter.limitBlog}
                   className="custom-text-select"
@@ -203,7 +203,7 @@ const ControlFilter = ({ dataFilter, setDataFilter, submitSearch }) => {
               </FormControl>
             </Box>
             <MDButton variant="outlined" color="primary" onClick={submitSearch}>
-              Seach
+              Tìm kiếm
             </MDButton>
           </Box>
         </Grid>
@@ -305,7 +305,7 @@ const FeedBack = () => {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  FeedBacks
+                  Phản hồi
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>

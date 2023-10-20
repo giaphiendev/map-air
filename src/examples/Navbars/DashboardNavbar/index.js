@@ -1,26 +1,14 @@
 import { useEffect, useState } from 'react'
-
-// react-router components
 import { useLocation } from 'react-router-dom'
-
-// prop-types is a library for typechecking of props.
 import PropTypes from 'prop-types'
-
-// @material-ui core components
 import AppBar from '@mui/material/AppBar'
 import Icon from '@mui/material/Icon'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import Toolbar from '@mui/material/Toolbar'
-
-// React components
 import MDBox from 'components/MDBox'
-
-// React example components
 import Breadcrumbs from 'examples/Breadcrumbs'
 import NotificationItem from 'examples/Items/NotificationItem'
-
-// Custom styles for DashboardNavbar
 import {
   navbar,
   navbarContainer,
@@ -28,16 +16,17 @@ import {
   navbarMobileMenu,
   navbarRow,
 } from 'examples/Navbars/DashboardNavbar/styles'
+import routes from 'routes'
 
-// React context
 import { setMiniSidenav, setTransparentNavbar, useMaterialUIController } from 'context'
 
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState()
   const [controller, dispatch] = useMaterialUIController()
   const { miniSidenav, transparentNavbar, fixedNavbar, darkMode, openConfigurator } = controller
-  const [openMenu, setOpenMenu] = useState(false)
+  // const [openMenu, setOpenMenu] = useState(false)
   const route = useLocation().pathname.split('/').slice(1)
+  const title = routes.find((x) => x.key === route[route.length - 1]).name
 
   useEffect(() => {
     // Setting the navbar type
@@ -67,27 +56,27 @@ function DashboardNavbar({ absolute, light, isMini }) {
 
   const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav)
   // const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator)
-  const handleOpenMenu = (event) => setOpenMenu(event.currentTarget)
-  const handleCloseMenu = () => setOpenMenu(false)
+  // const handleOpenMenu = (event) => setOpenMenu(event.currentTarget)
+  // const handleCloseMenu = () => setOpenMenu(false)
 
   // Render the notifications menu
-  const renderMenu = () => (
-    <Menu
-      anchorEl={openMenu}
-      anchorReference={null}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'left',
-      }}
-      open={Boolean(openMenu)}
-      onClose={handleCloseMenu}
-      sx={{ mt: 2 }}
-    >
-      <NotificationItem icon={<Icon>email</Icon>} title="Check new messages" />
-      <NotificationItem icon={<Icon>podcasts</Icon>} title="Manage Podcast sessions" />
-      <NotificationItem icon={<Icon>shopping_cart</Icon>} title="Payment successfully completed" />
-    </Menu>
-  )
+  // const renderMenu = () => (
+  //   <Menu
+  //     anchorEl={openMenu}
+  //     anchorReference={null}
+  //     anchorOrigin={{
+  //       vertical: 'bottom',
+  //       horizontal: 'left',
+  //     }}
+  //     open={Boolean(openMenu)}
+  //     onClose={handleCloseMenu}
+  //     sx={{ mt: 2 }}
+  //   >
+  //     <NotificationItem icon={<Icon>email</Icon>} title="Check new messages" />
+  //     <NotificationItem icon={<Icon>podcasts</Icon>} title="Manage Podcast sessions" />
+  //     <NotificationItem icon={<Icon>shopping_cart</Icon>} title="Payment successfully completed" />
+  //   </Menu>
+  // )
 
   // Styles for the navbar icons
   const iconsStyle = ({ palette: { dark, white, text }, functions: { rgba } }) => ({
@@ -110,7 +99,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
     >
       <Toolbar sx={(theme) => navbarContainer(theme)}>
         <MDBox color="inherit" mb={{ xs: 1, md: 0 }} sx={(theme) => navbarRow(theme, { isMini })}>
-          <Breadcrumbs icon="home" title={route[route.length - 1]} route={route} light={light} />
+          <Breadcrumbs icon="home" title={title} route={route} light={light} />
         </MDBox>
         {isMini ? null : (
           <MDBox sx={(theme) => navbarRow(theme, { isMini })}>
@@ -143,7 +132,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
               >
                 <Icon sx={iconsStyle}>settings</Icon>
               </IconButton> */}
-              <IconButton
+              {/* <IconButton
                 size="small"
                 disableRipple
                 color="inherit"
@@ -155,7 +144,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
               >
                 <Icon sx={iconsStyle}>notifications</Icon>
               </IconButton>
-              {renderMenu()}
+              {renderMenu()} */}
             </MDBox>
           </MDBox>
         )}

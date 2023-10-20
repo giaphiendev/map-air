@@ -68,7 +68,7 @@ const old_routes = [
 const new_routes = [
   {
     type: 'collapse',
-    name: 'User',
+    name: 'Quản lí người dùng',
     key: 'user-management',
     icon: <Icon fontSize="small">person</Icon>,
     route: '/user-management',
@@ -76,7 +76,7 @@ const new_routes = [
   },
   {
     type: 'collapse',
-    name: 'News',
+    name: 'Tin tức',
     key: 'news-management',
     icon: <Icon fontSize="small">newspaper</Icon>,
     route: '/news-management',
@@ -84,7 +84,7 @@ const new_routes = [
   },
   {
     type: 'collapse',
-    name: 'Document',
+    name: 'Quản lí tài liệu',
     key: 'document-management',
     icon: <TextSnippetIcon fontSize="small" />,
     route: '/document-management',
@@ -92,7 +92,7 @@ const new_routes = [
   },
   {
     type: 'collapse',
-    name: 'Map Data Class',
+    name: 'Lớp dữ liệu bản đồ',
     key: 'map-class',
     icon: <CategoryIcon fontSize="small" />,
     route: '/map-class',
@@ -100,7 +100,7 @@ const new_routes = [
   },
   {
     type: 'collapse',
-    name: 'Map Data Class Category',
+    name: 'Danh mục dữ liệu bản đồ',
     key: 'map-class-category',
     icon: <CategoryIcon fontSize="small" />,
     route: '/map-class-category',
@@ -108,7 +108,7 @@ const new_routes = [
   },
   {
     type: 'collapse',
-    name: 'PDF Map',
+    name: 'Bản đồ PDF',
     key: 'pdf-map',
     icon: <PictureAsPdfIcon fontSize="small" />,
     route: '/pdf-map',
@@ -116,7 +116,7 @@ const new_routes = [
   },
   {
     type: 'collapse',
-    name: 'Feedback',
+    name: 'Phản hồi',
     key: 'feedback',
     icon: <FeedbackIcon fontSize="small" />,
     route: '/feedback',
@@ -124,7 +124,7 @@ const new_routes = [
   },
   {
     type: 'collapse',
-    name: 'Satellite Image',
+    name: 'Ảnh vệ tinh',
     key: 'satellite-image',
     icon: <SatelliteAltIcon fontSize="small" />,
     route: '/satellite-image',
@@ -133,7 +133,7 @@ const new_routes = [
 ]
 
 const routes = [
-  ...old_routes,
+  // ...old_routes,
   ...new_routes,
   // {
   //   type: 'collapse',
