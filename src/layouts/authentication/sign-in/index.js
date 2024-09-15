@@ -25,7 +25,7 @@ const Alert = forwardRef((props, ref) => {
 
 function LoginPage() {
   const navigate = useNavigate()
-  const [formLogin, setFormLogin] = useState({ email: 'admin@gmail.com', password: '123456aA@' })
+  const [formLogin, setFormLogin] = useState({ email: '', password: '' })
   const [controller, dispatch] = useAuthContextController()
   const [openToast, setOpenToast] = useState(false)
   const [messageError, setMessageError] = useState('This is an error message!')
@@ -82,7 +82,7 @@ function LoginPage() {
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Sign in
+            Đăng nhập
           </MDTypography>
           <Grid
             container
@@ -121,7 +121,7 @@ function LoginPage() {
             <MDBox mb={2}>
               <MDInput
                 type="password"
-                label="Password"
+                label="Mật khẩu"
                 fullWidth
                 value={formLogin.password}
                 onChange={(e) => setFormLogin({ ...formLogin, password: e.target.value })}
@@ -129,12 +129,12 @@ function LoginPage() {
             </MDBox>
             <MDBox mt={4} mb={1}>
               <MDButton variant="gradient" color="info" fullWidth onClick={handleLogin}>
-                sign in
+                Đăng nhập
               </MDButton>
             </MDBox>
             <MDBox mt={3} mb={1} textAlign="center">
-              <MDTypography variant="button" color="text">
-                Don&apos;t have an account?{' '}
+              {/* <MDTypography variant="button" color="text">
+                Bạn chưa có tài khoản?{' '}
                 <MDTypography
                   component={Link}
                   to="/authentication/sign-up"
@@ -143,9 +143,9 @@ function LoginPage() {
                   fontWeight="medium"
                   textGradient
                 >
-                  Sign up
+                  Đăng kí
                 </MDTypography>
-              </MDTypography>
+              </MDTypography> */}
             </MDBox>
           </MDBox>
         </MDBox>

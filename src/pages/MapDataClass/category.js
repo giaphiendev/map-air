@@ -96,9 +96,9 @@ const CustomDataTable = ({ data, handleOpenDialog, setActiveItem }) => {
                       setActiveItem(item)
                     }}
                   >
-                    Edit
+                    Sửa
                   </MenuItem>
-                  <MenuItem onClick={() => handMenuItem('DELETE')}>Delete</MenuItem>
+                  <MenuItem onClick={() => handMenuItem('DELETE')}>Xoá</MenuItem>
                 </Menu>
               </MybodyCell>
             </TableRow>

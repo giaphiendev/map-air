@@ -29,10 +29,10 @@ function Cover() {
           textAlign="center"
         >
           <MDTypography variant="h3" fontWeight="medium" color="white" mt={1}>
-            Reset Password
+            Cài lại Mật khẩu
           </MDTypography>
           <MDTypography display="block" variant="button" color="white" my={1}>
-            You will receive an e-mail in maximum 60 seconds
+            Bạn sẽ nhận được e-mail trong tối đa 60 giây
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>

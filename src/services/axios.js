@@ -2,7 +2,9 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL || 'localhost',
+  // baseURL: process.env.REACT_APP_BASE_URL || 'localhost',
+  baseURL: 'http://103.130.212.145:42521',
+
   headers: {
     'Content-Type': 'application/json',
   },

@@ -50,7 +50,7 @@ function PaymentMethod() {
                 ****&nbsp;&nbsp;****&nbsp;&nbsp;****&nbsp;&nbsp;7852
               </MDTypography>
               <MDBox ml="auto" lineHeight={0} color={darkMode ? 'white' : 'dark'}>
-                <Tooltip title="Edit Card" placement="top">
+                <Tooltip title="Sửa Card" placement="top">
                   <Icon sx={{ cursor: 'pointer' }} fontSize="small">
                     edit
                   </Icon>
@@ -75,7 +75,7 @@ function PaymentMethod() {
                 ****&nbsp;&nbsp;****&nbsp;&nbsp;****&nbsp;&nbsp;5248
               </MDTypography>
               <MDBox ml="auto" lineHeight={0} color={darkMode ? 'white' : 'dark'}>
-                <Tooltip title="Edit Card" placement="top">
+                <Tooltip title="Sửa Card" placement="top">
                   <Icon sx={{ cursor: 'pointer' }} fontSize="small">
                     edit
                   </Icon>

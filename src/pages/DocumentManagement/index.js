@@ -109,10 +109,10 @@ const CustomDataTable = ({ data, handleOpenDialog, setActiveItem }) => {
                       setActiveItem(item)
                     }}
                   >
-                    Edit
+                    Sửa
                   </MenuItem>
-                  <MenuItem onClick={() => handMenuItem('DELETE')}>Delete</MenuItem>
-                  <MenuItem onClick={() => handMenuItem('BLOCK')}>Block</MenuItem>
+                  <MenuItem onClick={() => handMenuItem('DELETE')}>Xoá</MenuItem>
+                  <MenuItem onClick={() => handMenuItem('BLOCK')}>Chặn</MenuItem>
                   <MenuItem onClick={() => handMenuItem('RESET_PASSWORD')}>Reset password</MenuItem>
                 </Menu>
               </MybodyCell>

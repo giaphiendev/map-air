@@ -31,16 +31,16 @@ function DefaultNavbarMobile({ open, close }) {
       <MDBox px={0.5}>
         <DefaultNavbarLink light={false} icon="donut_large" name="dashboard" route="/dashboard" />
         <DefaultNavbarLink light={false} icon="person" name="profile" route="/profile" />
-        <DefaultNavbarLink
+        {/* <DefaultNavbarLink
           light={false}
           icon="account_circle"
-          name="sign up"
+          name="Đăng kí"
           route="/authentication/sign-up"
-        />
+        /> */}
         <DefaultNavbarLink
           light={false}
           icon="key"
-          name="sign in"
+          name="Đăng nhập"
           route="/authentication/sign-in"
         />
       </MDBox>

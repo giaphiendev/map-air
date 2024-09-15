@@ -31,6 +31,7 @@ import MybodyCell from 'examples/Tables/DataTable/MyBodyCell'
 import MyHeadCell from 'examples/Tables/DataTable/MyHeadCell'
 
 import TableBody from '@mui/material/TableBody'
+import api from '../../api'
 
 const dataDemo = () => {
   let arr = new Array(20)
@@ -46,7 +47,58 @@ const dataDemo = () => {
   return rs
 }
 
-const DATA_DEMO = dataDemo()
+const DATA_DEMO = [
+  {
+    id: '35',
+    ten: 'Bản đồ lượng mưa trung bình nửa đầu tháng 6/2022 tỉnh Ninh Thuận tỉ lệ 1: 50.000',
+    uri: 'luong_mua_tb/01_15_06.jpg',
+  },
+  {
+    id: '34',
+    ten: 'Bản đồ hướng gió trung bình nửa cuối tháng 4/2023 tỉnh Ninh Thuận tỉ lệ 1: 50.000',
+    uri: 'HUONG_GIO_TB_16_30_04_2023.png',
+  },
+  {
+    id: '33',
+    ten: 'Bản đồ hướng gió trung bình nửa đầu tháng 4/2023 tỉnh Ninh Thuận tỉ lệ 1: 50.000',
+    uri: 'HUONG_GIO_TB_01_15_04_2023.png',
+  },
+  {
+    id: '32',
+    ten: 'Bản đồ hướng gió trung bình nửa cuối tháng 3/2023 tỉnh Ninh Thuận tỉ lệ 1: 50.000',
+    uri: 'HUONG_GIO_TB_16_30_03_2023.png',
+  },
+  {
+    id: '31',
+    ten: 'Bản đồ hướng gió trung bình nửa đầu tháng 3/2023 tỉnh Ninh Thuận tỉ lệ 1: 50.000',
+    uri: 'HUONG_GIO_TB_01_15_03_2023.png',
+  },
+  {
+    id: '30',
+    ten: 'Bản đồ hướng gió trung bình nửa cuối tháng 2/2023 tỉnh Ninh Thuận tỉ lệ 1: 50.000',
+    uri: 'HUONG_GIO_TB_16_28_02_2023.png',
+  },
+  {
+    id: '29',
+    ten: 'Bản đồ hướng gió trung bình nửa đầu tháng 2/2023 tỉnh Ninh Thuận tỉ lệ 1: 50.000',
+    uri: 'HUONG_GIO_TB_01_15_02_2023.png',
+  },
+  {
+    id: '28',
+    ten: 'Bản đồ hướng gió trung bình nửa cuối tháng 1/2023 tỉnh Ninh Thuận tỉ lệ 1: 50.000',
+    uri: 'HUONG_GIO_TB_16_30_01_2023.png',
+  },
+  {
+    id: '27',
+    ten: 'Bản đồ hướng gió trung bình nửa đầu tháng 1/2023 tỉnh Ninh Thuận tỉ lệ 1: 50.000',
+    uri: 'HUONG_GIO_TB_01_15_01_2023.png',
+  },
+  {
+    id: '26',
+    ten: 'Bản đồ hướng gió trung bình nửa cuối tháng 12/2022 tỉnh Ninh Thuận tỉ lệ 1: 50.000',
+    uri: 'HUONG_GIO_TB_16_30_12_2022.png',
+  },
+]
 
 const CustomDataTable = ({ data, handleOpenDialog, setActiveItem }) => {
   const [anchorEl, setAnchorEl] = useState(null)
@@ -73,7 +125,7 @@ const CustomDataTable = ({ data, handleOpenDialog, setActiveItem }) => {
               ID
             </MyHeadCell>
             <MyHeadCell align="left">Tiêu đề</MyHeadCell>
-            <MyHeadCell align="center">Thời gian</MyHeadCell>
+            {/* <MyHeadCell align="center">Thời gian</MyHeadCell> */}
             <MyHeadCell align="center">URL</MyHeadCell>
             <MyHeadCell align="center">Hành động</MyHeadCell>
           </TableRow>
@@ -84,9 +136,18 @@ const CustomDataTable = ({ data, handleOpenDialog, setActiveItem }) => {
               <MybodyCell align="left" width="5%">
                 {item.id}
               </MybodyCell>
-              <MybodyCell align="left">{item.title}</MybodyCell>
-              <MybodyCell align="center">{item.date}</MybodyCell>
-              <MybodyCell align="center">{item.url}</MybodyCell>
+              <MybodyCell align="left">{item.ten}</MybodyCell>
+              {/* <MybodyCell align="center">{item.date}</MybodyCell> */}
+              <MybodyCell align="center">
+                <img
+                  src={`http://103.130.212.145:42521/api/public/${item.uri}`}
+                  alt="image"
+                  className="p-3"
+                  style={{
+                    maxWidth: 100,
+                  }}
+                />
+              </MybodyCell>
               <MybodyCell align="center">
                 <MDTypography color="text" onClick={(e) => handleClick(item.id, e)}>
                   <Icon>more_vert</Icon>
@@ -106,9 +167,9 @@ const CustomDataTable = ({ data, handleOpenDialog, setActiveItem }) => {
                       setActiveItem(item)
                     }}
                   >
-                    Edit
+                    Sửa
                   </MenuItem>
-                  <MenuItem onClick={() => handMenuItem('DELETE')}>Delete</MenuItem>
+                  <MenuItem onClick={() => handMenuItem('DELETE')}>Xoá</MenuItem>
                 </Menu>
               </MybodyCell>
             </TableRow>
@@ -133,36 +194,6 @@ const ControlFilter = ({ dataFilter, setDataFilter, handleOpenDialog, submitSear
                 onChange={(e) => setDataFilter({ ...dataFilter, keySearch: e.target.value })}
               />
             </MDBox>
-
-            <Box sx={{ width: '150px', mx: 1 }}>
-              <FormControl fullWidth>
-                <TextField
-                  select
-                  label="Sắp xếp theo thời gian"
-                  onChange={(e) => setDataFilter({ ...dataFilter, sortByDate: e.target.value })}
-                  value={dataFilter.sortByDate}
-                  className="custom-text-select"
-                >
-                  <MenuItem value={1}>Giảm dần</MenuItem>
-                  <MenuItem value={2}>Tăng dần</MenuItem>
-                </TextField>
-              </FormControl>
-            </Box>
-            <Box sx={{ width: '100px', mx: 1 }}>
-              <FormControl fullWidth>
-                <TextField
-                  select
-                  label="Giới hạn"
-                  onChange={(e) => setDataFilter({ ...dataFilter, limitBlog: e.target.value })}
-                  value={dataFilter.limitBlog}
-                  className="custom-text-select"
-                >
-                  <MenuItem value={3}>3</MenuItem>
-                  <MenuItem value={6}>6</MenuItem>
-                  <MenuItem value={9}>9</MenuItem>
-                </TextField>
-              </FormControl>
-            </Box>
             <MDButton variant="outlined" color="primary" onClick={submitSearch}>
               Tìm kiếm
             </MDButton>
@@ -207,12 +238,12 @@ const DialogUpdateBlog = ({ activeItem, isOpen, handleClose, handleSubmit }) => 
       aria-labelledby="scroll-dialog-title"
       aria-describedby="scroll-dialog-description"
     >
-      <DialogTitle>{formData?.id ? 'Update Report' : 'New Report'}</DialogTitle>
+      <DialogTitle>{formData?.id ? 'Cập nhật' : 'Thêm mới'}</DialogTitle>
       <DialogContent dividers>
         <MDBox sx={{ width: '100%', mt: 2 }}>
           <TextField
             fullWidth
-            label="Title"
+            label="Tên bản đồ"
             variant="outlined"
             value={formData?.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -220,10 +251,10 @@ const DialogUpdateBlog = ({ activeItem, isOpen, handleClose, handleSubmit }) => 
         </MDBox>
         <MDBox sx={{ mt: 2 }}>
           <Typography gutterBottom variant="title2" component="div">
-            File PDF Map
+            File bản đồ chuyên đề
           </Typography>
           <FileUpload
-            title="Drag or drop some files here"
+            title="Kéo hoặc thả một số tệp vào đây"
             multiple={false}
             // accept={['img', 'png', 'image', 'pdf']}
             value={files}
@@ -236,9 +267,9 @@ const DialogUpdateBlog = ({ activeItem, isOpen, handleClose, handleSubmit }) => 
       </DialogContent>
       <DialogActions>
         <Button color="secondary" onClick={internalClose}>
-          Cancel
+          Huỷ
         </Button>
-        <Button onClick={internalSubmit}>Submit</Button>
+        <Button onClick={internalSubmit}>Thêm</Button>
       </DialogActions>
     </Dialog>
   )
@@ -250,23 +281,50 @@ const PDFMap = () => {
 
   const [openDialog, setOpenDialog] = useState(false)
   const [activeItem, setActiveItem] = useState(null)
-  const [dataFilter, setDataFilter] = useState({ keySearch: '', sortByDate: 1, limitBlog: 6 })
+  const [dataFilter, setDataFilter] = useState({ keySearch: '' })
+
+  const [dsBanDo, setDsBanDo] = useState([])
+  const [limit, setLimit] = useState(12)
+  const [page, setPage] = useState(1)
+  const [tong, setTong] = useState(1)
+  const [t, setT] = useState([])
+
+  const fetchData = async () => {
+    const resgetDanhSachBanDoChuyenDe = await api.getDanhSachBanDoChuyenDe(
+      `limit=${limit}&page=${page}&search=${dataFilter.keySearch}`
+    )
+    if (resgetDanhSachBanDoChuyenDe.success) {
+      setDsBanDo(resgetDanhSachBanDoChuyenDe.data.bandochuyendes)
+      setTong(resgetDanhSachBanDoChuyenDe.data.totalItems)
+      let to = []
+      for (let index = 1; index <= resgetDanhSachBanDoChuyenDe.data.totalItems / 12 + 1; index++) {
+        to.push(index)
+      }
+      setT(to)
+    }
+  }
 
   useEffect(() => {
-    let cloneArr = [...DATA_DEMO]
-    if (dataFilter.sortByDate === 1) {
-      cloneArr = [...DATA_DEMO].reverse()
-    }
-    const newData = cloneArr.slice(0, dataFilter.limitBlog)
-    setData(newData)
-  }, [])
+    fetchData()
+  }, [page])
 
   const handleCloseDialog = () => {
     setOpenDialog(false)
     setActiveItem(null)
   }
-  const handleSubmitDialog = (data) => {
+  const handleSubmitDialog = async (data) => {
     console.log('data submit: ', data)
+    var formData = new FormData()
+    formData.append('img', data.file[0], data.file[0].name)
+    const resupanhbandochuyende = await api.upanhbandochuyende(formData)
+    if (resupanhbandochuyende.success) {
+      var body = {
+        ten: data.title,
+        filename: resupanhbandochuyende.res,
+      }
+      const rescreatebandochuyende = await api.createbandochuyende(body)
+      fetchData()
+    }
     handleCloseDialog()
   }
   const handleOpenDialog = () => {
@@ -275,17 +333,14 @@ const PDFMap = () => {
 
   const submitSearch = () => {
     console.log('dataFilter: ', dataFilter)
-    let cloneArr = [...DATA_DEMO]
-    if (dataFilter.sortByDate === 1) {
-      cloneArr = [...DATA_DEMO].reverse()
-    }
-    const newData = cloneArr.slice(0, dataFilter.limitBlog)
-    setData(newData)
+    fetchData()
   }
 
   const handleChangePage = (e, val) => {
     console.log('call api: ', val)
-    setPaginator({ ...paginator, current: val })
+    if (val <= tong / 12 + 1) {
+      setPage(val)
+    }
   }
   return (
     <DashboardLayout>
@@ -313,12 +368,12 @@ const PDFMap = () => {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  Quản lí bản đồ PDF
+                  Quản lí Bản đồ chuyên đề
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
                 <CustomDataTable
-                  data={data}
+                  data={dsBanDo}
                   handleOpenDialog={handleOpenDialog}
                   setActiveItem={setActiveItem}
                 />
@@ -328,12 +383,7 @@ const PDFMap = () => {
         </Grid>
       </MDBox>
 
-      <Pagination
-        sx={{ mt: 2 }}
-        count={paginator.total}
-        page={paginator.current}
-        onChange={handleChangePage}
-      />
+      <Pagination sx={{ mt: 2 }} count={tong / 12 + 1} page={page} onChange={handleChangePage} />
       <DialogUpdateBlog
         activeItem={activeItem}
         setActiveItem={setActiveItem}

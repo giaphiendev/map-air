@@ -162,11 +162,11 @@ function CustomDataTable({ rows, cols }) {
                         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
                       >
-                        <MenuItem onClick={() => handMenuItem('EDIT')}>Edit</MenuItem>
-                        <MenuItem onClick={() => handMenuItem('DELETE')}>Delete</MenuItem>
-                        <MenuItem onClick={() => handMenuItem('BLOCK')}>Block</MenuItem>
+                        <MenuItem onClick={() => handMenuItem('EDIT')}>Sửa</MenuItem>
+                        <MenuItem onClick={() => handMenuItem('DELETE')}>Xoá</MenuItem>
+                        <MenuItem onClick={() => handMenuItem('BLOCK')}>Chặn</MenuItem>
                         <MenuItem onClick={() => handMenuItem('RESET_PASSWORD')}>
-                          Reset password
+                          Cài lại password
                         </MenuItem>
                       </Menu>
                     </MybodyCell>

@@ -32,64 +32,59 @@ import axiosInstance from 'services/axios'
 const DATA_DEMO = [
   {
     id: 1,
-    img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8?w=242&h=121&fit=crop&auto=format&dpr=2',
-    title: 'Lizard',
+    img: 'https://images2.thanhnien.vn/zoom/328_205/52806826…665-20-0-520-800-crop-16794138434321731260352.jpg',
+    title: 'Báo động chất lượng không khí toàn cầu',
     subtitle: 'subtitle',
     date: '11/11/2022',
     view: 10,
-    description:
-      'Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica',
+    description: 'Ô nhiễm không khí nghiêm trọng ở Bangkok, hàng trăm ngàn người nhập viện',
   },
   {
     id: 2,
-    img: 'https://mui.com/static/images/cards/contemplative-reptile.jpg',
-    title: 'K hieu kieu gi',
+    img: '	https://images2.thanhnien.vn/zoom/328_205/Uploaded/hongkyqc/2022_10_08/zem-city-1-1869.jpeg',
+    title: 'Không gian sống xanh giữa lòng thành phố - Vấn đề đang được quan tâm hàng đầu',
     subtitle: 'subtitle',
     date: '11/11/2022',
     view: 0,
     description:
-      'Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica',
+      'Với mục tiêu nâng cao chất lượng cuộc sống người dân giữa đô thị, tái tạo mảng xanh đang là vấn đề được ưu tiên hàng đầu tại kế hoạch quy chuẩn của sở xây dựng TP.HCM. Đặc biệt, khi các dự án cơ sở hạ tầng mới được đưa vào sử dụng, không gian sống xanh giữa đô thị càng được quan tâm hơn.',
   },
   {
     id: 3,
-    img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6?w=242&h=121&fit=crop&auto=format&dpr=2',
-    title: 'K hieu kieu gi',
+    img: 'https://images2.thanhnien.vn/zoom/328_205/Uploaded/lequan/2021_08_12/onkk1_QSOQ.jpg',
+    title: 'Hàng nghìn người ở Hà Nội có thể đã tử vong sớm do phơi nhiễm bụi mịn',
     subtitle: 'subtitle',
     date: '11/11/2022',
     view: 11,
-    description:
-      'Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica',
+    description: 'Khẩu trang nào có thể chống bụi mịn và phòng ngừa dịch Covid-19?',
   },
   {
     id: 4,
-    img: 'https://images.unsplash.com/photo-1563298723-dcfebaa392e3?w=248&fit=crop&auto=format&dpr=2',
-    title: 'ABC xyz',
+    img: 'https://images2.thanhnien.vn/zoom/328_205/Uploaded/minhnguyet/2022_03_23/khoi-mu-4332.jpg',
+    title: 'Không có quốc gia nào đáp ứng tiêu chí chất lượng không khí của WHO',
     subtitle: 'subtitle',
     date: '11/11/2022',
     view: 1,
-    description:
-      'Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica',
+    description: '10 xu hướng sức khỏe bạn nên thử trong năm mới này',
   },
 
   {
     id: 5,
-    img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6?w=242&h=121&fit=crop&auto=format&dpr=2',
-    title: 'K hieu kieu gi',
+    img: '	https://images2.thanhnien.vn/zoom/328_205/Uploaded/lequan/2021_06_30/dotromra_UOAF.jpg',
+    title: 'Hà Nội: Để ô nhiễm từ chất thải, người đứng đầu phải chịu trách nhiệm',
     subtitle: 'subtitle',
     date: '11/11/2022',
     view: 4,
-    description:
-      'Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica',
+    description: 'Thời tiết oi bức, khói bụi, làm gì để bảo vệ sức khỏe?',
   },
   {
     id: 6,
-    img: 'https://images.unsplash.com/photo-1563298723-dcfebaa392e3?w=248&fit=crop&auto=format&dpr=2',
-    title: 'ABC xyz',
+    img: 'https://images2.thanhnien.vn/zoom/328_205/Uploaded/congthang/2021_03_23/cay-canh_GNKB.jpg',
+    title: '9 loại cây thanh lọc không khí nên có trong nhà bạn',
     subtitle: 'subtitle',
     date: '11/11/2022',
     view: 8,
-    description:
-      'Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica',
+    description: '5 mẹo biến ngôi nhà của bạn trở nên xanh mát và vui khỏe',
   },
 ]
 
@@ -131,9 +126,9 @@ function MediaCard({ item, handleOpenDialog, setActiveItem }) {
             setActiveItem(item)
           }}
         >
-          Edit
+          Sửa
         </Button>
-        <Button size="small">Delete</Button>
+        <Button size="small">Xoá</Button>
         <Box>
           {item.view > 0 ? (
             <Typography

@@ -43,6 +43,7 @@ import logoAtlassian from 'assets/images/small-logos/logo-atlassian.svg'
 import logoInvesion from 'assets/images/small-logos/logo-invision.svg'
 import logoSlack from 'assets/images/small-logos/logo-slack.svg'
 import logoSpotify from 'assets/images/small-logos/logo-spotify.svg'
+import api from '../api'
 
 const ROLE_USER = {
   1: 'SuperAdmin',
@@ -108,12 +109,12 @@ function CustomDataTable({ dataRows, handleOpenDialog, setActiveItem }) {
         <MDBox component="thead">
           <TableRow>
             <MyHeadCell width={'10%'} align={'left'}>
-              ID
+              SĐT
             </MyHeadCell>
-            <MyHeadCell align={'left'}>Ảnh</MyHeadCell>
+            <MyHeadCell align={'left'}>Tên đăng nhập</MyHeadCell>
             <MyHeadCell align={'center'}>Email</MyHeadCell>
             <MyHeadCell align={'center'}>Tên người dùng</MyHeadCell>
-            <MyHeadCell align={'center'}>Vai trò</MyHeadCell>
+            {/* <MyHeadCell align={'center'}>Vai trò</MyHeadCell> */}
             <MyHeadCell align={'center'}>Hành động</MyHeadCell>
           </TableRow>
         </MDBox>
@@ -121,12 +122,10 @@ function CustomDataTable({ dataRows, handleOpenDialog, setActiveItem }) {
           {dataRows.map((item, idx) => (
             <TableRow key={idx}>
               <MybodyCell width={'10%'} align={'left'}>
-                {item.id}
+                {item.sdt}
               </MybodyCell>
 
-              <MybodyCell align={'left'}>
-                <ImageComponent image={item.image} />
-              </MybodyCell>
+              <MybodyCell align={'left'}>{item.us}</MybodyCell>
 
               <MybodyCell align={'center'}>
                 <MDTypography
@@ -148,11 +147,11 @@ function CustomDataTable({ dataRows, handleOpenDialog, setActiveItem }) {
                   color="text"
                   fontWeight="medium"
                 >
-                  {item.name}
+                  {item.firstname} {item.lastname}
                 </MDTypography>
               </MybodyCell>
 
-              <MybodyCell align={'center'}>
+              {/* <MybodyCell align={'center'}>
                 <MDTypography
                   component="a"
                   href="#"
@@ -160,9 +159,9 @@ function CustomDataTable({ dataRows, handleOpenDialog, setActiveItem }) {
                   color="text"
                   fontWeight="medium"
                 >
-                  {ROLE_USER[item.role]}
+                  {item.role}
                 </MDTypography>
-              </MybodyCell>
+              </MybodyCell> */}
 
               <MybodyCell align={'center'}>
                 <MDTypography color="text" onClick={(e) => handleClick(item.id, e)}>
@@ -176,10 +175,10 @@ function CustomDataTable({ dataRows, handleOpenDialog, setActiveItem }) {
                   anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                   transformOrigin={{ vertical: 'top', horizontal: 'center' }}
                 >
-                  <MenuItem onClick={() => handMenuItem('EDIT', item)}>Edit</MenuItem>
-                  <MenuItem onClick={() => handMenuItem('DELETE')}>Delete</MenuItem>
-                  <MenuItem onClick={() => handMenuItem('BLOCK')}>Block</MenuItem>
-                  <MenuItem onClick={() => handMenuItem('RESET_PASSWORD')}>Reset password</MenuItem>
+                  <MenuItem onClick={() => handMenuItem('EDIT', item)}>Sửa</MenuItem>
+                  <MenuItem onClick={() => handMenuItem('DELETE')}>Xoá</MenuItem>
+                  {/* <MenuItem onClick={() => handMenuItem('BLOCK')}>Chặn</MenuItem>
+                  <MenuItem onClick={() => handMenuItem('RESET_PASSWORD')}>Reset password</MenuItem> */}
                 </Menu>
               </MybodyCell>
             </TableRow>
@@ -191,7 +190,14 @@ function CustomDataTable({ dataRows, handleOpenDialog, setActiveItem }) {
 }
 
 function DialogCreateUser({ activeItem, isOpen, handleClose, handleSubmit }) {
-  const [formData, setFormData] = useState({ email: '', name: '', password: '', role: '' })
+  const [formData, setFormData] = useState({
+    email: '',
+    name: '',
+    password: '',
+    firstname: '',
+    lastname: '',
+    sdt: '',
+  })
   const [validateForm, setValidateForm] = useState({})
   useEffect(() => {
     if (activeItem) {
@@ -233,13 +239,13 @@ function DialogCreateUser({ activeItem, isOpen, handleClose, handleSubmit }) {
   }
   return (
     <Dialog open={isOpen} onClose={internalClose}>
-      <DialogTitle>Create new user</DialogTitle>
+      <DialogTitle>Thêm mới người dùng</DialogTitle>
       <DialogContent sx={{ width: '500px' }}>
-        <DialogContentText>Enter your information here.</DialogContentText>
+        <DialogContentText>Nhập thông tin của bạn ở đây.</DialogContentText>
         <FormControl sx={{ paddingBottom: '10px' }} fullWidth>
           <TextField
             margin="dense"
-            label="Email Address"
+            label="Địa chỉ email"
             type="email"
             value={formData.email}
             fullWidth
@@ -251,7 +257,7 @@ function DialogCreateUser({ activeItem, isOpen, handleClose, handleSubmit }) {
         <FormControl sx={{ paddingBottom: '10px' }} fullWidth>
           <TextField
             margin="dense"
-            label="User name"
+            label="Tên đăng nhập"
             value={formData.name}
             type="text"
             fullWidth
@@ -260,7 +266,43 @@ function DialogCreateUser({ activeItem, isOpen, handleClose, handleSubmit }) {
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
         </FormControl>
-        <MDBox sx={{ paddingBottom: '10px' }}>
+        <FormControl sx={{ paddingBottom: '10px' }} fullWidth>
+          <TextField
+            margin="dense"
+            label="Họ"
+            value={formData.firstname}
+            type="text"
+            fullWidth
+            variant="standard"
+            error={!!validateForm.firstname}
+            onChange={(e) => setFormData({ ...formData, firstname: e.target.value })}
+          />
+        </FormControl>
+        <FormControl sx={{ paddingBottom: '10px' }} fullWidth>
+          <TextField
+            margin="dense"
+            label="Tên"
+            value={formData.lastname}
+            type="text"
+            fullWidth
+            variant="standard"
+            error={!!validateForm.lastname}
+            onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
+          />
+        </FormControl>
+        <FormControl sx={{ paddingBottom: '10px' }} fullWidth>
+          <TextField
+            margin="dense"
+            label="Số điện thoại"
+            value={formData.sdt}
+            type="text"
+            fullWidth
+            variant="standard"
+            error={!!validateForm.sdt}
+            onChange={(e) => setFormData({ ...formData, sdt: e.target.value })}
+          />
+        </FormControl>
+        {/* <MDBox sx={{ paddingBottom: '10px' }}>
           <FormControl
             fullWidth
             variant="standard"
@@ -271,7 +313,7 @@ function DialogCreateUser({ activeItem, isOpen, handleClose, handleSubmit }) {
             <Select
               labelId="select_role_label"
               value={formData.role}
-              label="Age"
+              label="Tuổi"
               autoWidth
               onChange={(e) => setFormData({ ...formData, role: e.target.value })}
             >
@@ -282,11 +324,11 @@ function DialogCreateUser({ activeItem, isOpen, handleClose, handleSubmit }) {
               ))}
             </Select>
           </FormControl>
-        </MDBox>
+        </MDBox> */}
         <FormControl sx={{ paddingBottom: '10px' }} fullWidth>
           <TextField
             margin="dense"
-            label="Password"
+            label="Mật khẩu"
             value={formData.password}
             type="password"
             fullWidth
@@ -297,8 +339,8 @@ function DialogCreateUser({ activeItem, isOpen, handleClose, handleSubmit }) {
         </FormControl>
       </DialogContent>
       <DialogActions>
-        <MDButton onClick={internalClose}>Cancel</MDButton>
-        <MDButton onClick={internalSubmit}>Create</MDButton>
+        <MDButton onClick={internalClose}>Huỷ</MDButton>
+        <MDButton onClick={internalSubmit}>Thêm mới</MDButton>
       </DialogActions>
     </Dialog>
   )
@@ -316,14 +358,48 @@ function UserManagement() {
   const [dataFilter, setDataFilter] = useState({
     searchText: '',
   })
+  const [dsNguoiDung, setDsNguoiDung] = useState([])
+  const [limit, setLimit] = useState(12)
+  const [page, setPage] = useState(1)
+  const [tong, setTong] = useState(1)
+  const [t, setT] = useState([])
+
+  const fetchData = async () => {
+    const resgetAllUser = await api.getAllUser(
+      `limit=${limit}&page=${page}&search=${dataFilter.searchText}`
+    )
+    if (resgetAllUser.success) {
+      setDsNguoiDung(resgetAllUser.data.users)
+      setTong(resgetAllUser.data.totalItems)
+      let to = []
+      for (let index = 1; index <= resgetAllUser.data.totalItems / 12 + 1; index++) {
+        to.push(index)
+      }
+      setT(to)
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [page])
 
   const handleCloseDialog = () => {
     setOpenDialog(false)
     setActiveItem(null)
   }
-  const handleSubmitDialog = (data) => {
+  const handleSubmitDialog = async (data) => {
     console.log('data submit: ', data)
+    var body = {
+      us: data.name,
+      pa: data.password,
+      email: data.email,
+      sdt: data.sdt,
+      firstname: data.firstname,
+      lastname: data.lastname,
+    }
+    const rescreateUser = await api.createUser(body)
     handleCloseDialog()
+    fetchData()
   }
   const handleOpenDialog = () => {
     setOpenDialog(true)
@@ -331,11 +407,15 @@ function UserManagement() {
 
   const submitSearch = () => {
     console.log('dataFilter: ', dataFilter)
+    fetchData()
   }
 
   const handleChangePage = (e, val) => {
     console.log('call api: ', val)
-    setPaginator({ ...paginator, current: val })
+    // setPaginator({ ...paginator, current: val });
+    if (val <= tong / 12 + 1) {
+      setPage(val)
+    }
   }
 
   return (
@@ -384,7 +464,7 @@ function UserManagement() {
               </MDBox>
               <MDBox pt={3}>
                 <CustomDataTable
-                  dataRows={dataRows}
+                  dataRows={dsNguoiDung}
                   handleOpenDialog={handleOpenDialog}
                   setActiveItem={setActiveItem}
                 />
@@ -393,7 +473,7 @@ function UserManagement() {
           </Grid>
         </Grid>
       </MDBox>
-      <Pagination count={6} page={1} onChange={handleChangePage} />
+      <Pagination count={tong / 12 + 1} page={page} onChange={handleChangePage} />
       {(activeItem || openDialog) && (
         <DialogCreateUser
           isOpen={openDialog}
