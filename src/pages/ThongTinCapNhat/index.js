@@ -38,14 +38,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import dayjs from 'dayjs'
-import api from 'api'
+import api from '../../api'
 import { Icon, Menu } from '@mui/material'
-
-const STATUS_FEEDBACK = {
-  1: 'Đã duyệt',
-  2: 'Đang chờ',
-  3: 'Từ chối',
-}
 
 const dataDemo = () => {
   let arr = new Array(20)
@@ -69,8 +63,8 @@ function RecipeReviewCard({ item }) {
   return (
     <Box>
       <CardHeader
-        title={item.firstname}
-        subheader={item.ngaytaophananh}
+        title={item.tennhatki}
+        subheader={item.luotnguoitruycap}
         action={
           <CardActions disableSpacing>
             <IconButton aria-label="add to favorites">
@@ -84,10 +78,16 @@ function RecipeReviewCard({ item }) {
       />
       <CardContent>
         <Typography variant="h6" color="secondary">
-          {item.title}
+          {item.tennhatki}
         </Typography>
         <Typography variant="subtitle2" color="secondary">
-          {item.noidung}
+          {item.noidungnhatky}
+        </Typography>
+        <Typography variant="subtitle2" color="secondary">
+          {item.luotnguoitruycap}
+        </Typography>
+        <Typography variant="subtitle2" color="secondary">
+          {item.useridnoinhatki}
         </Typography>
       </CardContent>
     </Box>
@@ -95,18 +95,13 @@ function RecipeReviewCard({ item }) {
 }
 
 const CustomDataTable = ({
-  data,
+  dataRows,
   handleOpenDialog,
   setActiveItem,
   fetchData,
 }) => {
   const [anchorEl, setAnchorEl] = useState(null)
 
-  const onDeleteItem = async (item) => {
-    console.log(item)
-    const rescreateUser = await api.xoaPhanHoi(item.idphananh)
-    fetchData()
-  }
   const handleClick = (index, event) => {
     setAnchorEl({ [index]: event.currentTarget })
   }
@@ -115,47 +110,73 @@ const CustomDataTable = ({
     setAnchorEl(null)
   }
 
+  const handMenuItem = async (type, item) => {
+    if (type === 'EDIT') {
+      setActiveItem(item)
+      handleOpenDialog()
+    }
+    if (type === 'DELETE') {
+      const res = await api.deleteNhatKy(item.idnhatky, {})
+    }
+    handleClose()
+    fetchData()
+  }
+
   return (
     <TableContainer sx={{ boxShadow: 'none' }}>
       <Table>
         <MDBox component="thead">
           <TableRow>
-            <MyHeadCell align="center">Người tạo</MyHeadCell>
-            <MyHeadCell align="center">Tiêu đề</MyHeadCell>
-            <MyHeadCell align="center">Trạng thái</MyHeadCell>
-            <MyHeadCell align="center">Thời gian</MyHeadCell>
+            <MyHeadCell align="center">Tiêu đề </MyHeadCell>
+            <MyHeadCell align="center">Nội dung</MyHeadCell>
+            <MyHeadCell align="center">Ngày tạo</MyHeadCell>
             <MyHeadCell align="center">Hành động</MyHeadCell>
           </TableRow>
         </MDBox>
         <TableBody>
-          {data.map((item, id) => (
-            <TableRow key={id}>
-              <MybodyCell align="center">{item.firstname}</MybodyCell>
-              <MybodyCell align="center">{item.noidung}</MybodyCell>
-              <MybodyCell align="center">{item.trangthai}</MybodyCell>
-              <MybodyCell align="center">{item.ngaytaophananh}</MybodyCell>
-              <MybodyCell align={'center'}>
-                <MDTypography
-                  color="text"
-                  onClick={(e) => handleClick(item.idphananh, e)}
-                >
-                  <Icon>more_vert</Icon>
-                </MDTypography>
-                <Menu
-                  anchorEl={anchorEl && anchorEl[item.idphananh]}
-                  keepMounted
-                  open={Boolean(anchorEl && anchorEl[item.idphananh])}
-                  onClose={handleClose}
-                  anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                  transformOrigin={{ vertical: 'top', horizontal: 'center' }}
-                >
-                  <MenuItem onClick={() => onDeleteItem(item)}>Xoá</MenuItem>
-                  {/* <MenuItem onClick={() => handMenuItem('BLOCK')}>Chặn</MenuItem>
-                  <MenuItem onClick={() => handMenuItem('RESET_PASSWORD')}>Reset password</MenuItem> */}
-                </Menu>
-              </MybodyCell>
-            </TableRow>
-          ))}
+          {dataRows?.map(
+            (item, idx) =>
+              item.kieu == 0 && (
+                <TableRow key={idx}>
+                  <MybodyCell align="center">{item.tennhatky}</MybodyCell>
+                  <MybodyCell align="center">{item.noidungnhatky}</MybodyCell>
+                  <MybodyCell align="center">
+                    {item.luotnguoitruycap}
+                  </MybodyCell>
+                  <MybodyCell align={'center'}>
+                    <MDTypography
+                      color="text"
+                      onClick={(e) => handleClick(item.idnhatky, e)}
+                    >
+                      <Icon>more_vert</Icon>
+                    </MDTypography>
+                    <Menu
+                      anchorEl={anchorEl && anchorEl[item.idnhatky]}
+                      keepMounted
+                      open={Boolean(anchorEl && anchorEl[item.idnhatky])}
+                      onClose={handleClose}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center',
+                      }}
+                    >
+                      <MenuItem onClick={() => handMenuItem('EDIT', item)}>
+                        Sửa
+                      </MenuItem>
+                      <MenuItem onClick={() => handMenuItem('DELETE', item)}>
+                        Xoá
+                      </MenuItem>
+                      {/* <MenuItem onClick={() => handMenuItem('BLOCK')}>Chặn</MenuItem>
+  <MenuItem onClick={() => handMenuItem('RESET_PASSWORD')}>Reset password</MenuItem> */}
+                    </Menu>
+                  </MybodyCell>
+                </TableRow>
+              )
+          )}
         </TableBody>
       </Table>
     </TableContainer>
@@ -188,30 +209,6 @@ const ControlFilter = ({ dataFilter, setDataFilter, submitSearch }) => {
                 />
               </LocalizationProvider>
             </MDBox>
-
-            <Box sx={{ width: '150px', mx: 1 }}>
-              <FormControl fullWidth>
-                <TextField
-                  select
-                  label="Phân loại trạng thái"
-                  onChange={(e) =>
-                    setDataFilter({
-                      ...dataFilter,
-                      classifyStatus: e.target.value,
-                    })
-                  }
-                  value={dataFilter.classifyStatus}
-                  className="custom-text-select"
-                >
-                  <MenuItem value={0}>All</MenuItem>
-                  {Object.keys(STATUS_FEEDBACK).map((key) => (
-                    <MenuItem key={key} value={key}>
-                      {STATUS_FEEDBACK[key]}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </FormControl>
-            </Box>
             <Box sx={{ width: '150px', mx: 1 }}>
               <FormControl fullWidth>
                 <TextField
@@ -249,64 +246,140 @@ const ControlFilter = ({ dataFilter, setDataFilter, submitSearch }) => {
               Tìm kiếm
             </MDButton>
           </Box>
+          <MDButton
+            variant="outlined"
+            color="primary"
+            onClick={handleOpenDialog}
+          >
+            Thêm mới
+          </MDButton>
         </Grid>
       </Grid>
     </MDBox>
   )
 }
 
-const DialogUpdateBlog = ({ activeItem, isOpen, handleClose }) => {
+const formatDate = (date) => {
+  const day = String(date.getDate()).padStart(2, '0') // Lấy ngày và thêm số 0 nếu cần
+  const month = String(date.getMonth() + 1).padStart(2, '0') // Lấy tháng (0-indexed) và thêm số 0
+  const year = date.getFullYear() // Lấy năm
+
+  return `${day}/${month}/${year}` // Ghép thành chuỗi theo định dạng
+}
+
+const DialogUpdateBlog = ({
+  activeItem,
+  isOpen,
+  handleClose,
+  setActiveItem,
+  fetchData,
+}) => {
+  const them = async () => {
+    const res = await api.themNhatKy({
+      tennhatky: activeItem?.tennhatky,
+      noidungnhatky: activeItem?.noidungnhatky,
+      luotnguoitruycap: formatDate(new Date()),
+      kieu: 0,
+    })
+    handleClose()
+    setActiveItem({})
+    fetchData()
+  }
+
+  const sua = async () => {
+    const res = await api.capNhatNhatKy(activeItem?.idnhatky, {
+      tennhatky: activeItem?.tennhatky,
+      noidungnhatky: activeItem?.noidungnhatky,
+    })
+    handleClose()
+    setActiveItem({})
+    fetchData()
+  }
+
   return (
     <Dialog
       open={isOpen}
       maxWidth="md"
       fullWidth
-      onClose={() => handleClose()}
+      onClose={handleClose}
       scroll="paper"
       aria-labelledby="scroll-dialog-title"
       aria-describedby="scroll-dialog-description"
     >
-      <DialogTitle>Chi tiết</DialogTitle>
+      <DialogTitle>
+        {activeItem?.idnhatky ? 'Cập nhật thông tin' : 'Thêm mới thông tin'}
+      </DialogTitle>
       <DialogContent dividers>
-        <RecipeReviewCard item={activeItem} />
+        <MDBox sx={{ width: '100%', mt: 2 }}>
+          <TextField
+            fullWidth
+            label="Tiêu đề"
+            variant="outlined"
+            value={activeItem?.tennhatky}
+            onChange={(e) =>
+              setActiveItem({ ...activeItem, tennhatky: e.target.value })
+            }
+          />
+        </MDBox>
+        <MDBox sx={{ width: '100%', mt: 2 }}>
+          <TextField
+            fullWidth
+            label="Nội dung"
+            variant="outlined"
+            multiline
+            maxRows={10}
+            rows={5}
+            value={activeItem?.noidungnhatky}
+            onChange={(e) =>
+              setActiveItem({ ...activeItem, noidungnhatky: e.target.value })
+            }
+          />
+        </MDBox>
       </DialogContent>
       <DialogActions>
-        <Button color="secondary" onClick={() => handleClose()}>
-          Close
+        <Button color="secondary" onClick={handleClose}>
+          Hủy
+        </Button>
+        <Button
+          onClick={() => {
+            if (activeItem?.idnhatky) {
+              sua()
+            } else {
+              them()
+            }
+          }}
+        >
+          Lưu
         </Button>
       </DialogActions>
     </Dialog>
   )
 }
 
-const FeedBack = () => {
-  const [data, setData] = useState([])
+const UpdateInfoManagement = () => {
+  const [data, setData] = useState(DATA_DEMO)
+  const [paginator, setPaginator] = useState({ total: 5, current: 1 })
+
+  const [openDialog, setOpenDialog] = useState(false)
+  const [activeItem, setActiveItem] = useState(null)
+  const [dataFilter, setDataFilter] = useState({
+    searchText: '',
+  })
+  const [dsNhatKy, setDsNhatKy] = useState([])
   const [limit, setLimit] = useState(12)
   const [page, setPage] = useState(1)
   const [tong, setTong] = useState(1)
   const [t, setT] = useState([])
 
-  const [openDialog, setOpenDialog] = useState(false)
-  const [activeItem, setActiveItem] = useState(null)
-  const [paginator, setPaginator] = useState({ total: 10, current: 1 })
-
-  const [dataFilter, setDataFilter] = useState({
-    searchText: '',
-  })
-
   const fetchData = async () => {
-    const resgetAllUser = await api.getPhanHoi(
+    const res = await api.getAllNhatKy(
       `limit=${limit}&page=${page}&search=${dataFilter.searchText}`
     )
-    if (resgetAllUser.success) {
-      setData(resgetAllUser.data.phananhs)
-      setTong(resgetAllUser.data.totalItems)
+    if (res.success) {
+      setDsNhatKy(res.data.nhatkys)
+      setTong(res.data.totalItems)
       let to = []
-      for (
-        let index = 1;
-        index <= resgetAllUser.data.totalItems / 12 + 1;
-        index++
-      ) {
+      for (let index = 1; index <= res.data.totalItems / 12 + 1; index++) {
         to.push(index)
       }
       setT(to)
@@ -342,9 +415,45 @@ const FeedBack = () => {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-
-      <MDBox pt={4}>
-        <Grid container>
+      <MDBox pt={2} pb={2}>
+        <Grid container spacing={6}>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Box sx={{ display: 'flex' }}>
+              <MDBox pr={1} sx={{ width: '300px' }}>
+                <TextField
+                  sx={{ width: '100%' }}
+                  label="Nhập tìm kiếm"
+                  autoComplete="off"
+                  value={dataFilter.searchText}
+                  onChange={(e) =>
+                    setDataFilter({ ...dataFilter, searchText: e.target.value })
+                  }
+                />
+              </MDBox>
+              <MDButton
+                variant="outlined"
+                color="primary"
+                onClick={submitSearch}
+              >
+                Tìm kiếm
+              </MDButton>
+            </Box>
+            <MDButton
+              variant="outlined"
+              color="primary"
+              onClick={handleOpenDialog}
+            >
+              Thêm thông báo
+            </MDButton>
+          </Grid>
           <Grid item xs={12}>
             <Card>
               <MDBox
@@ -358,12 +467,12 @@ const FeedBack = () => {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  Phản ánh
+                  Thông tin cập nhật
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
                 <CustomDataTable
-                  data={data}
+                  dataRows={dsNhatKy}
                   handleOpenDialog={handleOpenDialog}
                   setActiveItem={setActiveItem}
                   fetchData={fetchData}
@@ -378,18 +487,15 @@ const FeedBack = () => {
         count={tong / 12 + 1}
         page={page}
         onChange={handleChangePage}
-        style={{
-          marginTop: 12,
-        }}
       />
-      {activeItem && (
-        <DialogUpdateBlog
-          activeItem={activeItem}
-          isOpen={openDialog}
-          handleClose={handleCloseDialog}
-        />
-      )}
+      <DialogUpdateBlog
+        activeItem={activeItem}
+        isOpen={openDialog}
+        handleClose={handleCloseDialog}
+        setActiveItem={setActiveItem}
+        fetchData={fetchData}
+      />
     </DashboardLayout>
   )
 }
-export default FeedBack
+export default UpdateInfoManagement

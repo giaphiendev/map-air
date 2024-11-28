@@ -11,7 +11,7 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import FormControl from '@mui/material/FormControl'
 import Grid from '@mui/material/Grid'
-import Menu from '@mui/material/Menu'
+import IconButton from '@mui/material/IconButton'
 import MenuItem from '@mui/material/MenuItem'
 import Pagination from '@mui/material/Pagination'
 import Table from '@mui/material/Table'
@@ -19,15 +19,8 @@ import TableContainer from '@mui/material/TableContainer'
 import TableRow from '@mui/material/TableRow'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
-import FileUpload from 'react-material-file-upload'
 
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-
-import dayjs from 'dayjs'
-import Icon from '@mui/material/Icon'
-
+import VisibilityIcon from '@mui/icons-material/Visibility'
 import MDBox from 'components/MDBox'
 import MDButton from 'components/MDButton'
 import MDTypography from 'components/MDTypography'
@@ -36,9 +29,20 @@ import MyHeadCell from 'examples/Tables/DataTable/MyHeadCell'
 
 import TableBody from '@mui/material/TableBody'
 
-const STATUS_SATELLITE = {
-  1: 'Excel',
-  2: 'Shapefile',
+import DoneIcon from '@mui/icons-material/Done'
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt'
+import CardActions from '@mui/material/CardActions'
+import CardContent from '@mui/material/CardContent'
+import CardHeader from '@mui/material/CardHeader'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import dayjs from 'dayjs'
+
+const STATUS_FEEDBACK = {
+  1: 'Đã duyệt',
+  2: 'Đang chờ',
+  3: 'Từ chối',
 }
 
 const dataDemo = () => {
@@ -47,52 +51,78 @@ const dataDemo = () => {
   for (let i = 1; i <= arr.length; i++) {
     rs.push({
       id: i,
-      url: `http://linktofile${i}`,
-      type: Math.ceil(Math.random() * 2),
+      user: `user ${i}`,
+      title: `new document ${i}`,
+      status: Math.ceil(Math.random() * 3),
       date: `${i}/12/2022`,
+      context: `${i} - Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10 minutes. Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over medium-high heat. Add chicken, shrimp and chorizo, and cook, stirring occasionally until lightly browned, 6 to 8 minutes. Transfer shrimp to a large plate and set aside, leaving chicken and chorizo in the pan. Add pimentón, bay leaves, garlic, tomatoes, onion, salt and pepper, and cook, stirring often until thickened and fragrant, about 10 mi medium-high heat.broth in a pot until simmering, add saffron and set aside for 10 minutes. Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over medium-high heat. Add chicken, shrimp and chorizo, and cook, stirring occasionally until lightly browned, 6 to 8 minutes. Transfer shrimp to a large plate and set aside, leaving chicken and chorizo in the pan. Add pimentón, bay leaves, garlic, tomatoes, onion, salt and pepper, and cook, stirring often until thickened and fragrant, about 10 mi medium-high heat.`,
     })
   }
   return rs
 }
-
 const DATA_DEMO = dataDemo()
 
-const CustomDataTable = ({ data, handleOpenDialog, setActiveItem }) => {
-  const [anchorEl, setAnchorEl] = useState(null)
+function RecipeReviewCard({ item }) {
+  return (
+    <Box>
+      <CardHeader
+        title={item.useridnoiphananh}
+        subheader={item.ngaytaophananh}
+        action={
+          <CardActions disableSpacing>
+            <IconButton aria-label="add to favorites">
+              <ThumbDownAltIcon />
+            </IconButton>
+            <IconButton aria-label="share">
+              <DoneIcon />
+            </IconButton>
+          </CardActions>
+        }
+      />
+      <CardContent>
+        <Typography variant="h6" color="secondary">
+          {item.useridnoiphananh}
+        </Typography>
+        <Typography variant="subtitle2" color="secondary">
+          {item.noidung}
+        </Typography>
+        <Typography variant="subtitle2" color="secondary">
+          {item.ngaytaophananh}
+        </Typography>
+        <Typography variant="subtitle2" color="secondary">
+          {item.trangthai}
+        </Typography>
+      </CardContent>
+    </Box>
+  )
+}
 
-  const handleClick = (index, event) => {
-    setAnchorEl({ [index]: event.currentTarget })
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
-
-  const handMenuItem = (type) => {
-    handleClose()
-    console.log('type: ', type)
-  }
+const CustomDataTable = ({ dataRows, handleOpenDialog, setActiveItem }) => {
   return (
     <TableContainer sx={{ boxShadow: 'none' }}>
       <Table>
         <MDBox component="thead">
           <TableRow>
-            <MyHeadCell align="center">ID</MyHeadCell>
-            <MyHeadCell align="center">Link ảnh</MyHeadCell>
-            <MyHeadCell align="center">Loại</MyHeadCell>
+            <MyHeadCell align="center">Người phản ánh</MyHeadCell>
+            <MyHeadCell align="center">Nội dung</MyHeadCell>
             <MyHeadCell align="center">Ngày tạo</MyHeadCell>
+            <MyHeadCell align="center">Trạng thái</MyHeadCell>
             <MyHeadCell align="center">Hành động</MyHeadCell>
           </TableRow>
         </MDBox>
         <TableBody>
-          {data.map((item, id) => (
-            <TableRow key={id}>
-              <MybodyCell align="center">{item.id}</MybodyCell>
-              <MybodyCell align="center">{item.url}</MybodyCell>
-              <MybodyCell align="center">{STATUS_SATELLITE[item.type]}</MybodyCell>
-              <MybodyCell align="center">{item.date}</MybodyCell>
-              <MybodyCell align="center">
-                <MDTypography color="text" onClick={(e) => handleClick(item.id, e)}>
+          {dataRows?.map((item, idx) => (
+            <TableRow key={idx}>
+              <MybodyCell align="center">{item.useridnoiphananh}</MybodyCell>
+              <MybodyCell align="center">{item.noidung}</MybodyCell>
+              <MybodyCell align="center">{item.ngaytaophananh}</MybodyCell>
+              <MybodyCell align="center">{item.trangthai}</MybodyCell>
+
+              <MybodyCell align={'center'}>
+                <MDTypography
+                  color="text"
+                  onClick={(e) => handleClick(item.id, e)}
+                >
                   <Icon>more_vert</Icon>
                 </MDTypography>
                 <Menu
@@ -103,16 +133,14 @@ const CustomDataTable = ({ data, handleOpenDialog, setActiveItem }) => {
                   anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                   transformOrigin={{ vertical: 'top', horizontal: 'center' }}
                 >
-                  <MenuItem
-                    onClick={() => {
-                      handleClose()
-                      handleOpenDialog()
-                      setActiveItem(item)
-                    }}
-                  >
+                  <MenuItem onClick={() => handMenuItem('EDIT', item)}>
                     Sửa
                   </MenuItem>
-                  <MenuItem onClick={() => handMenuItem('DELETE')}>Xoá</MenuItem>
+                  <MenuItem onClick={() => handMenuItem('DELETE')}>
+                    Xoá
+                  </MenuItem>
+                  {/* <MenuItem onClick={() => handMenuItem('BLOCK')}>Chặn</MenuItem>
+                  <MenuItem onClick={() => handMenuItem('RESET_PASSWORD')}>Reset password</MenuItem> */}
                 </Menu>
               </MybodyCell>
             </TableRow>
@@ -123,7 +151,7 @@ const CustomDataTable = ({ data, handleOpenDialog, setActiveItem }) => {
   )
 }
 
-const ControlFilter = ({ dataFilter, setDataFilter, handleOpenDialog, submitSearch }) => {
+const ControlFilter = ({ dataFilter, setDataFilter, submitSearch }) => {
   const handleOutputDate = (e) => {
     const newDate = dayjs(e.$d.toISOString()).format('DD-MM-YYYY')
     setDataFilter({ ...dataFilter, dateFilter: newDate })
@@ -131,7 +159,15 @@ const ControlFilter = ({ dataFilter, setDataFilter, handleOpenDialog, submitSear
   return (
     <MDBox pt={2} pb={2}>
       <Grid container spacing={6}>
-        <Grid item xs={12} sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
           <Box sx={{ display: 'flex' }}>
             <MDBox>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -147,26 +183,32 @@ const ControlFilter = ({ dataFilter, setDataFilter, handleOpenDialog, submitSear
                 <TextField
                   select
                   label="Phân loại trạng thái"
-                  onChange={(e) => setDataFilter({ ...dataFilter, classifyStatus: e.target.value })}
+                  onChange={(e) =>
+                    setDataFilter({
+                      ...dataFilter,
+                      classifyStatus: e.target.value,
+                    })
+                  }
                   value={dataFilter.classifyStatus}
                   className="custom-text-select"
                 >
                   <MenuItem value={0}>All</MenuItem>
-                  {Object.keys(STATUS_SATELLITE).map((key) => (
+                  {Object.keys(STATUS_FEEDBACK).map((key) => (
                     <MenuItem key={key} value={key}>
-                      {STATUS_SATELLITE[key]}
+                      {STATUS_FEEDBACK[key]}
                     </MenuItem>
                   ))}
                 </TextField>
               </FormControl>
             </Box>
-
             <Box sx={{ width: '150px', mx: 1 }}>
               <FormControl fullWidth>
                 <TextField
                   select
                   label="Sắp xếp theo thời gian"
-                  onChange={(e) => setDataFilter({ ...dataFilter, sortByDate: e.target.value })}
+                  onChange={(e) =>
+                    setDataFilter({ ...dataFilter, sortByDate: e.target.value })
+                  }
                   value={dataFilter.sortByDate}
                   className="custom-text-select"
                 >
@@ -180,7 +222,9 @@ const ControlFilter = ({ dataFilter, setDataFilter, handleOpenDialog, submitSear
                 <TextField
                   select
                   label="Giới hạn"
-                  onChange={(e) => setDataFilter({ ...dataFilter, limitBlog: e.target.value })}
+                  onChange={(e) =>
+                    setDataFilter({ ...dataFilter, limitBlog: e.target.value })
+                  }
                   value={dataFilter.limitBlog}
                   className="custom-text-select"
                 >
@@ -194,87 +238,47 @@ const ControlFilter = ({ dataFilter, setDataFilter, handleOpenDialog, submitSear
               Tìm kiếm
             </MDButton>
           </Box>
-          <MDButton variant="outlined" color="primary" onClick={handleOpenDialog}>
-            Thêm mới
-          </MDButton>
         </Grid>
       </Grid>
     </MDBox>
   )
 }
 
-const DialogUpdateBlog = ({ activeItem, isOpen, handleClose, handleSubmit }) => {
-  const [files, setFiles] = useState([])
-  const [formData, setFormData] = useState({})
-
-  useEffect(() => {
-    if (activeItem) {
-      setFormData({ ...activeItem })
-    }
-  }, [activeItem])
-
-  const internalSubmit = () => {
-    // validate
-    handleSubmit({ ...formData, file: files })
-    setFormData({})
-    setFiles([])
-  }
-
-  const internalClose = () => {
-    setFormData({})
-    setFiles([])
-    handleClose()
-  }
-
+const DialogUpdateBlog = ({ activeItem, isOpen, handleClose }) => {
   return (
     <Dialog
       open={isOpen}
-      maxWidth="sm"
+      maxWidth="md"
       fullWidth
-      onClose={internalClose}
+      onClose={() => handleClose()}
       scroll="paper"
       aria-labelledby="scroll-dialog-title"
       aria-describedby="scroll-dialog-description"
     >
-      <DialogTitle>{formData?.id ? 'Update Image' : 'New Image'}</DialogTitle>
+      <DialogTitle>Chi tiết</DialogTitle>
       <DialogContent dividers>
-        <MDBox sx={{ mt: 2 }}>
-          <Typography gutterBottom variant="title2" component="div">
-            Ảnh vệ tinh
-          </Typography>
-          <FileUpload
-            title="Drag or drop some files here"
-            multiple={false}
-            // accept={['img', 'png', 'image', 'pdf']}
-            value={files}
-            onChange={setFiles}
-            buttonProps={{ variant: 'contained', sx: { color: '#fff' } }}
-            buttonText="Tải têp lên"
-            maxFiles={1}
-          />
-        </MDBox>
+        <RecipeReviewCard item={activeItem} />
       </DialogContent>
       <DialogActions>
-        <Button color="secondary" onClick={internalClose}>
-          Cancel
+        <Button color="secondary" onClick={() => handleClose()}>
+          Đóng
         </Button>
-        <Button onClick={internalSubmit}>Submit</Button>
       </DialogActions>
     </Dialog>
   )
 }
 
-const SatelliteImage = () => {
+const PhanAnhManagement = () => {
   const [data, setData] = useState(DATA_DEMO)
-  const [paginator, setPaginator] = useState({ total: 10, current: 1 })
+  const [paginator, setPaginator] = useState({ total: 5, current: 1 })
 
   const [openDialog, setOpenDialog] = useState(false)
   const [activeItem, setActiveItem] = useState(null)
   const [dataFilter, setDataFilter] = useState({
     dateFilter: dayjs('05-10-2023', 'DD-MM-YYYY'),
-    classifyStatus: 0,
     sortByDate: 1,
     limitBlog: 6,
+    classifyStatus: 0,
   })
 
   useEffect(() => {
@@ -289,10 +293,6 @@ const SatelliteImage = () => {
   const handleCloseDialog = () => {
     setOpenDialog(false)
     setActiveItem(null)
-  }
-  const handleSubmitDialog = (data) => {
-    console.log('data submit: ', data)
-    handleCloseDialog()
   }
   const handleOpenDialog = () => {
     setOpenDialog(true)
@@ -319,7 +319,6 @@ const SatelliteImage = () => {
       <ControlFilter
         dataFilter={dataFilter}
         setDataFilter={setDataFilter}
-        handleOpenDialog={handleOpenDialog}
         submitSearch={submitSearch}
       />
 
@@ -338,7 +337,7 @@ const SatelliteImage = () => {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  Ảnh vệ tinh
+                  Phản ánh
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
@@ -359,13 +358,14 @@ const SatelliteImage = () => {
         page={paginator.current}
         onChange={handleChangePage}
       />
-      <DialogUpdateBlog
-        activeItem={activeItem}
-        isOpen={openDialog}
-        handleClose={handleCloseDialog}
-        handleSubmit={handleSubmitDialog}
-      />
+      {activeItem && (
+        <DialogUpdateBlog
+          activeItem={activeItem}
+          isOpen={openDialog}
+          handleClose={handleCloseDialog}
+        />
+      )}
     </DashboardLayout>
   )
 }
-export default SatelliteImage
+export default PhanAnhManagement

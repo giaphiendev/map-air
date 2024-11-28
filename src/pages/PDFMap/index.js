@@ -260,7 +260,7 @@ const DialogUpdateBlog = ({ activeItem, isOpen, handleClose, handleSubmit }) => 
             value={files}
             onChange={setFiles}
             buttonProps={{ variant: 'contained', sx: { color: '#fff' } }}
-            buttonText="Upload File"
+            buttonText="Tải têp lên"
             maxFiles={1}
           />
         </MDBox>

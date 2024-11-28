@@ -43,14 +43,8 @@ import logoAtlassian from 'assets/images/small-logos/logo-atlassian.svg'
 import logoInvesion from 'assets/images/small-logos/logo-invision.svg'
 import logoSlack from 'assets/images/small-logos/logo-slack.svg'
 import logoSpotify from 'assets/images/small-logos/logo-spotify.svg'
-import api from '../api'
-
-const ROLE_USER = {
-  1: 'SuperAdmin',
-  2: 'Admin',
-  3: 'User',
-  4: 'Anonymous',
-}
+import api from 'api'
+import { Button } from '@mui/material'
 
 const dataDemo = () => {
   let list_img = [
@@ -78,7 +72,6 @@ const dataDemo = () => {
 }
 
 const DATA_DEMO = dataDemo()
-
 const ImageComponent = ({ image }) => (
   <MDBox display="flex" alignItems="center" lineHeight={1}>
     <MDAvatar src={image} size="sm" variant="rounded" />
@@ -95,7 +88,7 @@ function CustomDataTable({
 
   const onDeleteItem = async (item) => {
     console.log(item)
-    const rescreateUser = await api.delelteUser(item.iduser)
+    const rescreateUser = await api.xoaBaoCao(item.idbaocao)
     fetchData()
   }
 
@@ -119,24 +112,21 @@ function CustomDataTable({
       <Table>
         <MDBox component="thead">
           <TableRow>
-            <MyHeadCell width={'10%'} align={'left'}>
-              SĐT
-            </MyHeadCell>
-            <MyHeadCell align={'left'}>Tên đăng nhập</MyHeadCell>
-            <MyHeadCell align={'center'}>Email</MyHeadCell>
-            <MyHeadCell align={'center'}>Tên người dùng</MyHeadCell>
-            {/* <MyHeadCell align={'center'}>Vai trò</MyHeadCell> */}
-            <MyHeadCell align={'center'}>Hành động</MyHeadCell>
+            <MyHeadCell align={'left'}>Tên báo cáo</MyHeadCell>
+            <MyHeadCell align={'center'}>URI báo cáo</MyHeadCell>
+            <MyHeadCell align={'center'}>Ngày báo cáo</MyHeadCell>
+            <MyHeadCell align={'center'}>Người báo cáo</MyHeadCell>
+            <MyHeadCell align="center">Hành động</MyHeadCell>
           </TableRow>
         </MDBox>
         <TableBody>
           {dataRows.map((item, idx) => (
             <TableRow key={idx}>
               <MybodyCell width={'10%'} align={'left'}>
-                {item.sdt}
+                {item.tenbaocao}
               </MybodyCell>
 
-              <MybodyCell align={'left'}>{item.us}</MybodyCell>
+              <MybodyCell align={'left'}>{item.uribaocao}</MybodyCell>
 
               <MybodyCell align={'center'}>
                 <MDTypography
@@ -146,7 +136,7 @@ function CustomDataTable({
                   color="text"
                   fontWeight="medium"
                 >
-                  {item.email}
+                  {item.ngaytaobaocao}
                 </MDTypography>
               </MybodyCell>
 
@@ -158,33 +148,21 @@ function CustomDataTable({
                   color="text"
                   fontWeight="medium"
                 >
-                  {item.firstname} {item.lastname}
+                  {item.useridnoibaocao}
                 </MDTypography>
               </MybodyCell>
-
-              {/* <MybodyCell align={'center'}>
-                <MDTypography
-                  component="a"
-                  href="#"
-                  variant="button"
-                  color="text"
-                  fontWeight="medium"
-                >
-                  {item.role}
-                </MDTypography>
-              </MybodyCell> */}
 
               <MybodyCell align={'center'}>
                 <MDTypography
                   color="text"
-                  onClick={(e) => handleClick(item.iduser, e)}
+                  onClick={(e) => handleClick(item.idbaocao, e)}
                 >
                   <Icon>more_vert</Icon>
                 </MDTypography>
                 <Menu
-                  anchorEl={anchorEl && anchorEl[item.iduser]}
+                  anchorEl={anchorEl && anchorEl[item.idbaocao]}
                   keepMounted
-                  open={Boolean(anchorEl && anchorEl[item.iduser])}
+                  open={Boolean(anchorEl && anchorEl[item.idbaocao])}
                   onClose={handleClose}
                   anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                   transformOrigin={{ vertical: 'top', horizontal: 'center' }}
@@ -207,12 +185,9 @@ function CustomDataTable({
 
 function DialogCreateUser({ activeItem, isOpen, handleClose, handleSubmit }) {
   const [formData, setFormData] = useState({
-    email: '',
-    name: '',
-    password: '',
-    firstname: '',
-    lastname: '',
-    sdt: '',
+    tenbaocao: '',
+    uribaocao: '',
+    ngaytaobaocao: '',
   })
   const [validateForm, setValidateForm] = useState({})
   useEffect(() => {
@@ -228,9 +203,6 @@ function DialogCreateUser({ activeItem, isOpen, handleClose, handleSubmit }) {
       Object.keys(formData).forEach((key) => {
         let item = formData[key]
         if (!item) {
-          temp_error[key] = true
-        }
-        if (key === 'email' && !validateEmail(item)) {
           temp_error[key] = true
         }
       })
@@ -255,75 +227,54 @@ function DialogCreateUser({ activeItem, isOpen, handleClose, handleSubmit }) {
   }
   return (
     <Dialog open={isOpen} onClose={internalClose}>
-      <DialogTitle>Thêm mới người dùng</DialogTitle>
+      <DialogTitle>
+        {formData?.id ? 'Cập nhật thông tin' : 'Thêm mới thông tin'}
+      </DialogTitle>
       <DialogContent sx={{ width: '500px' }}>
         <DialogContentText>Nhập thông tin của bạn ở đây.</DialogContentText>
         <FormControl sx={{ paddingBottom: '10px' }} fullWidth>
           <TextField
             margin="dense"
-            label="Địa chỉ email"
-            type="email"
-            value={formData.email}
+            label="Tên báo cáo"
+            type="text"
+            value={formData.tenbaocao}
             fullWidth
             variant="standard"
-            error={!!validateForm.email}
+            error={!!validateForm.tenbaocao}
             onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
+              setFormData({ ...formData, tenbaocao: e.target.value })
             }
           />
         </FormControl>
         <FormControl sx={{ paddingBottom: '10px' }} fullWidth>
           <TextField
             margin="dense"
-            label="Tên đăng nhập"
-            value={formData.name}
+            label="URI báo cáo"
+            value={formData.uribaocao}
             type="text"
             fullWidth
             variant="standard"
-            error={!!validateForm.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          />
-        </FormControl>
-        <FormControl sx={{ paddingBottom: '10px' }} fullWidth>
-          <TextField
-            margin="dense"
-            label="Họ"
-            value={formData.firstname}
-            type="text"
-            fullWidth
-            variant="standard"
-            error={!!validateForm.firstname}
+            error={!!validateForm.uribaocao}
             onChange={(e) =>
-              setFormData({ ...formData, firstname: e.target.value })
+              setFormData({ ...formData, uribaocao: e.target.value })
             }
           />
         </FormControl>
         <FormControl sx={{ paddingBottom: '10px' }} fullWidth>
           <TextField
             margin="dense"
-            label="Tên"
-            value={formData.lastname}
-            type="text"
+            label=""
+            value={formData.ngaytaobaocao}
+            type="date"
             fullWidth
             variant="standard"
-            error={!!validateForm.lastname}
+            error={!!validateForm.ngaytaobaocao}
             onChange={(e) =>
-              setFormData({ ...formData, lastname: e.target.value })
+              setFormData({ ...formData, ngaytaobaocao: e.target.value })
             }
           />
         </FormControl>
-        <FormControl sx={{ paddingBottom: '10px' }} fullWidth>
-          <TextField
-            margin="dense"
-            label="Số điện thoại"
-            value={formData.sdt}
-            type="text"
-            fullWidth
-            variant="standard"
-            error={!!validateForm.sdt}
-            onChange={(e) => setFormData({ ...formData, sdt: e.target.value })}
-          />
-        </FormControl>
+
         {/* <MDBox sx={{ paddingBottom: '10px' }}>
           <FormControl
             fullWidth
@@ -347,20 +298,6 @@ function DialogCreateUser({ activeItem, isOpen, handleClose, handleSubmit }) {
             </Select>
           </FormControl>
         </MDBox> */}
-        <FormControl sx={{ paddingBottom: '10px' }} fullWidth>
-          <TextField
-            margin="dense"
-            label="Mật khẩu"
-            value={formData.password}
-            type="password"
-            fullWidth
-            variant="standard"
-            error={!!validateForm.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
-          />
-        </FormControl>
       </DialogContent>
       <DialogActions>
         <MDButton onClick={internalClose}>Huỷ</MDButton>
@@ -370,7 +307,7 @@ function DialogCreateUser({ activeItem, isOpen, handleClose, handleSubmit }) {
   )
 }
 
-function UserManagement() {
+function ReportManagement() {
   const [controllerAuth, dispatchAuth] = useAuthContextController()
   const { isAuth, meData } = controllerAuth
   const [dataRows, setDataRows] = useState(DATA_DEMO)
@@ -389,11 +326,11 @@ function UserManagement() {
   const [t, setT] = useState([])
 
   const fetchData = async () => {
-    const resgetAllUser = await api.getAllUser(
+    const resgetAllUser = await api.getBaoCao(
       `limit=${limit}&page=${page}&search=${dataFilter.searchText}`
     )
     if (resgetAllUser.success) {
-      setDsNguoiDung(resgetAllUser.data.users)
+      setDsNguoiDung(resgetAllUser.data.baocaos)
       setTong(resgetAllUser.data.totalItems)
       let to = []
       for (
@@ -418,14 +355,11 @@ function UserManagement() {
   const handleSubmitDialog = async (data) => {
     console.log('data submit: ', data)
     var body = {
-      us: data.name,
-      pa: data.password,
-      email: data.email,
-      sdt: data.sdt,
-      firstname: data.firstname,
-      lastname: data.lastname,
+      tenbaocao: data.tenbaocao,
+      uribaocao: data.uribaocao,
+      ngaytaobaocao: data.ngaytaobaocao,
     }
-    const rescreateUser = await api.createUser(body)
+    const rescreateUser = await api.createBaoCao(body)
     handleCloseDialog()
     fetchData()
   }
@@ -485,7 +419,7 @@ function UserManagement() {
               color="primary"
               onClick={handleOpenDialog}
             >
-              Thêm người dùng
+              Thêm báo cáo
             </MDButton>
           </Grid>
           <Grid item xs={12}>
@@ -501,7 +435,7 @@ function UserManagement() {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  Danh sách người dùng
+                  Danh sách báo cáo
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
@@ -533,4 +467,4 @@ function UserManagement() {
   )
 }
 
-export default UserManagement
+export default ReportManagement

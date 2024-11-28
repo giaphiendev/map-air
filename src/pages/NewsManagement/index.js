@@ -1,7 +1,6 @@
 import DashboardLayout from 'examples/LayoutContainers/DashboardLayout'
 import DashboardNavbar from 'examples/Navbars/DashboardNavbar'
 import { useEffect, useState } from 'react'
-
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import Box from '@mui/material/Box'
@@ -22,85 +21,39 @@ import Pagination from '@mui/material/Pagination'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import FileUpload from 'react-material-file-upload'
-
 import MDBox from 'components/MDBox'
 import MDButton from 'components/MDButton'
 import MDInput from 'components/MDInput'
 import MDTypography from 'components/MDTypography'
 import axiosInstance from 'services/axios'
+import api from 'api'
 
-const DATA_DEMO = [
-  {
-    id: 1,
-    img: 'https://images2.thanhnien.vn/zoom/328_205/52806826…665-20-0-520-800-crop-16794138434321731260352.jpg',
-    title: 'Báo động chất lượng không khí toàn cầu',
-    subtitle: 'subtitle',
-    date: '11/11/2022',
-    view: 10,
-    description: 'Ô nhiễm không khí nghiêm trọng ở Bangkok, hàng trăm ngàn người nhập viện',
-  },
-  {
-    id: 2,
-    img: '	https://images2.thanhnien.vn/zoom/328_205/Uploaded/hongkyqc/2022_10_08/zem-city-1-1869.jpeg',
-    title: 'Không gian sống xanh giữa lòng thành phố - Vấn đề đang được quan tâm hàng đầu',
-    subtitle: 'subtitle',
-    date: '11/11/2022',
-    view: 0,
-    description:
-      'Với mục tiêu nâng cao chất lượng cuộc sống người dân giữa đô thị, tái tạo mảng xanh đang là vấn đề được ưu tiên hàng đầu tại kế hoạch quy chuẩn của sở xây dựng TP.HCM. Đặc biệt, khi các dự án cơ sở hạ tầng mới được đưa vào sử dụng, không gian sống xanh giữa đô thị càng được quan tâm hơn.',
-  },
-  {
-    id: 3,
-    img: 'https://images2.thanhnien.vn/zoom/328_205/Uploaded/lequan/2021_08_12/onkk1_QSOQ.jpg',
-    title: 'Hàng nghìn người ở Hà Nội có thể đã tử vong sớm do phơi nhiễm bụi mịn',
-    subtitle: 'subtitle',
-    date: '11/11/2022',
-    view: 11,
-    description: 'Khẩu trang nào có thể chống bụi mịn và phòng ngừa dịch Covid-19?',
-  },
-  {
-    id: 4,
-    img: 'https://images2.thanhnien.vn/zoom/328_205/Uploaded/minhnguyet/2022_03_23/khoi-mu-4332.jpg',
-    title: 'Không có quốc gia nào đáp ứng tiêu chí chất lượng không khí của WHO',
-    subtitle: 'subtitle',
-    date: '11/11/2022',
-    view: 1,
-    description: '10 xu hướng sức khỏe bạn nên thử trong năm mới này',
-  },
-
-  {
-    id: 5,
-    img: '	https://images2.thanhnien.vn/zoom/328_205/Uploaded/lequan/2021_06_30/dotromra_UOAF.jpg',
-    title: 'Hà Nội: Để ô nhiễm từ chất thải, người đứng đầu phải chịu trách nhiệm',
-    subtitle: 'subtitle',
-    date: '11/11/2022',
-    view: 4,
-    description: 'Thời tiết oi bức, khói bụi, làm gì để bảo vệ sức khỏe?',
-  },
-  {
-    id: 6,
-    img: 'https://images2.thanhnien.vn/zoom/328_205/Uploaded/congthang/2021_03_23/cay-canh_GNKB.jpg',
-    title: '9 loại cây thanh lọc không khí nên có trong nhà bạn',
-    subtitle: 'subtitle',
-    date: '11/11/2022',
-    view: 8,
-    description: '5 mẹo biến ngôi nhà của bạn trở nên xanh mát và vui khỏe',
-  },
-]
-
-function MediaCard({ item, handleOpenDialog, setActiveItem }) {
+function MediaCard({ item, handleOpenDialog, setActiveItem, fetchData }) {
+  const onDeleteItem = async (item) => {
+    console.log(item)
+    const rescreateUser = await api.xoaTinTuc(item.idtintuc)
+    fetchData()
+  }
   return (
     <Card sx={{ maxWidth: 345 }}>
-      <CardMedia sx={{ height: 140 }} image={item.img} title={item.title} />
+      <CardMedia
+        sx={{ height: 140 }}
+        image={item.anhdaidien}
+        title={item.title}
+      />
       <CardContent>
         <Box>
           <Link href="#">
             <Typography gutterBottom variant="h5" component="div">
-              {item.title}
+              {item.tieude}
             </Typography>
           </Link>
-          <MDTypography sx={{ fontSize: '13px' }} variant="body2" color="secondary">
-            {item.date}
+          <MDTypography
+            sx={{ fontSize: '13px' }}
+            variant="body2"
+            color="secondary"
+          >
+            {item.ngaytaotintuc}
           </MDTypography>
         </Box>
         <Typography
@@ -114,11 +67,11 @@ function MediaCard({ item, handleOpenDialog, setActiveItem }) {
             WebkitBoxOrient: 'vertical',
           }}
         >
-          {item.description}
+          {item.chitiet}
         </Typography>
       </CardContent>
       <CardActions sx={{ justifyContent: 'space-around' }}>
-        <Button size="small">Read More</Button>
+        <Button size="small">Xem thêm</Button>
         <Button
           size="small"
           onClick={() => {
@@ -128,7 +81,9 @@ function MediaCard({ item, handleOpenDialog, setActiveItem }) {
         >
           Sửa
         </Button>
-        <Button size="small">Xoá</Button>
+        <Button onClick={() => onDeleteItem(item)} size="small">
+          Xoá
+        </Button>
         <Box>
           {item.view > 0 ? (
             <Typography
@@ -154,15 +109,25 @@ function MediaCard({ item, handleOpenDialog, setActiveItem }) {
   )
 }
 
-const RenderNews = ({ list_news, handleOpenDialog, setActiveItem }) => {
+const RenderNews = ({
+  list_news,
+  handleOpenDialog,
+  setActiveItem,
+  fetchData,
+}) => {
   return (
-    <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+    <Grid
+      container
+      spacing={{ xs: 2, md: 3 }}
+      columns={{ xs: 4, sm: 8, md: 12 }}
+    >
       {list_news.map((item, id) => (
-        <Grid key={id} item xs={2} sm={4} md={4}>
+        <Grid key={id} item xs={2} sm={3} md={3}>
           <MediaCard
             item={item}
             handleOpenDialog={handleOpenDialog}
             setActiveItem={setActiveItem}
+            fetchData={fetchData}
           />
         </Grid>
       ))}
@@ -170,18 +135,33 @@ const RenderNews = ({ list_news, handleOpenDialog, setActiveItem }) => {
   )
 }
 
-const ControlFilter = ({ dataFilter, setDataFilter, handleOpenDialog, submitSearch }) => {
+const ControlFilter = ({
+  dataFilter,
+  setDataFilter,
+  handleOpenDialog,
+  submitSearch,
+}) => {
   return (
     <MDBox pt={2} pb={2}>
       <Grid container spacing={6}>
-        <Grid item xs={12} sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
           <Box sx={{ display: 'flex' }}>
             <MDBox pr={1} sx={{ width: '300px' }}>
               <MDInput
                 sx={{ width: '100%' }}
                 label="Nhập tìm kiếm...."
                 value={dataFilter.keySearch}
-                onChange={(e) => setDataFilter({ ...dataFilter, keySearch: e.target.value })}
+                onChange={(e) =>
+                  setDataFilter({ ...dataFilter, keySearch: e.target.value })
+                }
               />
             </MDBox>
 
@@ -190,7 +170,9 @@ const ControlFilter = ({ dataFilter, setDataFilter, handleOpenDialog, submitSear
                 <TextField
                   select
                   label="Sắp xếp theo thời gian"
-                  onChange={(e) => setDataFilter({ ...dataFilter, sortByDate: e.target.value })}
+                  onChange={(e) =>
+                    setDataFilter({ ...dataFilter, sortByDate: e.target.value })
+                  }
                   value={dataFilter.sortByDate}
                   className="custom-text-select"
                 >
@@ -204,7 +186,9 @@ const ControlFilter = ({ dataFilter, setDataFilter, handleOpenDialog, submitSear
                 <TextField
                   select
                   label="Giới hạn"
-                  onChange={(e) => setDataFilter({ ...dataFilter, limitBlog: e.target.value })}
+                  onChange={(e) =>
+                    setDataFilter({ ...dataFilter, limitBlog: e.target.value })
+                  }
                   value={dataFilter.limitBlog}
                   className="custom-text-select"
                 >
@@ -218,7 +202,11 @@ const ControlFilter = ({ dataFilter, setDataFilter, handleOpenDialog, submitSear
               Tìm kiếm
             </MDButton>
           </Box>
-          <MDButton variant="outlined" color="primary" onClick={handleOpenDialog}>
+          <MDButton
+            variant="outlined"
+            color="primary"
+            onClick={handleOpenDialog}
+          >
             Thêm mới
           </MDButton>
         </Grid>
@@ -227,24 +215,43 @@ const ControlFilter = ({ dataFilter, setDataFilter, handleOpenDialog, submitSear
   )
 }
 
-const DialogUpdateBlog = ({ activeItem, isOpen, handleClose, handleSubmit }) => {
-  const [files, setFiles] = useState([])
-  const [formData, setFormData] = useState({ title: '', subtitle: '', description: '' })
-  const [formError, setFormError] = useState({
-    title: false,
-    subtitle: false,
-    description: false,
-    file: false,
+const DialogUpdateBlog = ({
+  activeItem,
+  isOpen,
+  handleClose,
+  handleSubmit,
+}) => {
+  const [dataFilter, setDataFilter] = useState({
+    searchText: '',
   })
-
+  const [files, setFiles] = useState([])
+  const [formData, setFormData] = useState({
+    tieude: '',
+    tieudecon: '',
+    anhdaidien: '',
+    motangan: '',
+    chitiet: '',
+    ngaytaotintuc: '',
+  })
+  const [formError, setFormError] = useState({
+    tieude: false,
+    tieudecon: false,
+    anhdaidien: false,
+    motangan: false,
+    chitiet: false,
+    ngaytaotintuc: false,
+  })
+  console.log(formData)
   useEffect(() => {
     if (activeItem) {
       setFormData({ ...activeItem })
       setFormError({
-        title: false,
-        subtitle: false,
-        description: false,
-        file: false,
+        tieude: false,
+        tieudecon: false,
+        anhdaidien: false,
+        motangan: false,
+        chitiet: false,
+        ngaytaotintuc: false,
       })
     }
   }, [activeItem])
@@ -252,14 +259,16 @@ const DialogUpdateBlog = ({ activeItem, isOpen, handleClose, handleSubmit }) => 
   const internalSubmit = () => {
     // validate
     let temp = {
-      title: false,
-      subtitle: false,
-      description: false,
-      file: false,
+      tieude: false,
+      tieudecon: false,
+      anhdaidien: false,
+      motangan: false,
+      chitiet: false,
+      ngaytaotintuc: false,
     }
-    if (files.length <= 0) {
-      temp.file = true
-    }
+    // if (files.length <= 0) {
+    //   temp.file = true
+    // }
     for (const [key, val] of Object.entries(formData)) {
       if (!!!val) {
         temp[key] = true
@@ -276,10 +285,12 @@ const DialogUpdateBlog = ({ activeItem, isOpen, handleClose, handleSubmit }) => 
 
   const handleCloseInternal = () => {
     setFormError({
-      title: false,
-      subtitle: false,
-      description: false,
-      file: false,
+      tieude: false,
+      tieudecon: false,
+      anhdaidien: false,
+      motangan: false,
+      chitiet: false,
+      ngaytaotintuc: false,
     })
     handleClose()
   }
@@ -294,71 +305,96 @@ const DialogUpdateBlog = ({ activeItem, isOpen, handleClose, handleSubmit }) => 
       aria-labelledby="scroll-dialog-title"
       aria-describedby="scroll-dialog-description"
     >
-      <DialogTitle>{formData?.id ? 'Update Blog' : 'New Blog'}</DialogTitle>
+      <DialogTitle>
+        {formData?.id ? 'Cập nhật thông tin' : 'Thêm mới thông tin'}
+      </DialogTitle>
       <DialogContent dividers>
         <MDBox sx={{ width: '100%', mt: 2 }}>
           <TextField
             fullWidth
-            label="Title"
+            label="Tiêu đề"
             variant="outlined"
-            value={formData?.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            error={formError.title}
+            value={formData?.tieude}
+            onChange={(e) =>
+              setFormData({ ...formData, tieude: e.target.value })
+            }
+            error={formError.tieude}
           />
         </MDBox>
         <MDBox sx={{ width: '100%', mt: 2 }}>
           <TextField
             fullWidth
-            label="Subtitle"
+            label="Tiêu đề phụ"
             variant="outlined"
-            value={formData?.subtitle}
-            onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
-            error={formError.subtitle}
+            value={formData?.tieudecon}
+            onChange={(e) =>
+              setFormData({ ...formData, tieudecon: e.target.value })
+            }
+            error={formError.tieudecon}
           />
         </MDBox>
         <MDBox sx={{ width: '100%', mt: 2 }}>
           <TextField
             fullWidth
-            label="Description"
+            label="Mô tả ngắn"
             variant="outlined"
             multiline
             maxRows={10}
             rows={5}
-            value={formData?.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            error={formError.description}
+            value={formData?.motangan}
+            onChange={(e) =>
+              setFormData({ ...formData, motangan: e.target.value })
+            }
+            error={formError.motangan}
+          />
+        </MDBox>
+        <MDBox sx={{ width: '100%', mt: 2 }}>
+          <TextField
+            fullWidth
+            label="Chi tiết"
+            variant="outlined"
+            multiline
+            maxRows={10}
+            rows={5}
+            value={formData?.chitiet}
+            onChange={(e) =>
+              setFormData({ ...formData, chitiet: e.target.value })
+            }
+            error={formError.chitiet}
           />
         </MDBox>
         {/*  */}
-        <MDBox sx={{ mt: 2 }}>
-          <Typography gutterBottom variant="title2" component="div">
-            Background Image
-          </Typography>
-          <FileUpload
-            title="Drag or drop some files here"
-            multiple={false}
-            accept={['image/*']}
-            value={files}
-            onChange={setFiles}
-            buttonProps={{ variant: 'contained', sx: { color: '#fff' } }}
-            buttonText="Upload image"
-            maxFiles={1}
-            sx={
-              formError.file && {
-                borderColor: 'red',
-                '&:hover': {
-                  borderColor: 'red',
-                },
-              }
+        <MDBox sx={{ width: '100%', mt: 2 }}>
+          <TextField
+            fullWidth
+            label=""
+            variant="outlined"
+            type="date"
+            value={formData?.ngaytaotintuc}
+            onChange={(e) =>
+              setFormData({ ...formData, ngaytaotintuc: e.target.value })
             }
+            error={formError.ngaytaotintuc}
+          />
+        </MDBox>
+        <MDBox sx={{ width: '100%', mt: 2 }}>
+          <TextField
+            fullWidth
+            label="Ảnh đại diện"
+            variant="outlined"
+            value={formData?.anhdaidien}
+            onChange={(e) =>
+              setFormData({ ...formData, anhdaidien: e.target.value })
+            }
+            error={formError.anhdaidien}
           />
         </MDBox>
       </DialogContent>
       <DialogActions>
         <Button color="secondary" onClick={handleCloseInternal}>
-          Cancel
+          Hủy
         </Button>
-        <Button onClick={internalSubmit}>Submit</Button>
+        <Button onClick={internalSubmit}>Lưu</Button>
       </DialogActions>
     </Dialog>
   )
@@ -366,51 +402,82 @@ const DialogUpdateBlog = ({ activeItem, isOpen, handleClose, handleSubmit }) => 
 
 const NewsManagement = () => {
   const [paginator, setPaginator] = useState({ total: 10, current: 1 })
-  const [listBlog, setListBlog] = useState([])
   const [openDialog, setOpenDialog] = useState(false)
   const [activeItem, setActiveItem] = useState(null)
-  const [dataFilter, setDataFilter] = useState({ keySearch: '', sortByDate: 1, limitBlog: 2 })
+  const [dataFilter, setDataFilter] = useState({
+    searchText: '',
+  })
+
+  const [dsTinTuc, setDsTinTuc] = useState([])
+  const [limit, setLimit] = useState(12)
+  const [page, setPage] = useState(1)
+  const [tong, setTong] = useState(1)
+  const [t, setT] = useState([])
+
+  const fetchData = async () => {
+    const resgetAllBlog = await api.getTinTuc(
+      `limit=${limit}&page=${page}&search=${dataFilter.searchText}`
+    )
+    if (resgetAllBlog.success) {
+      setDsTinTuc(resgetAllBlog.data.tinTucs)
+      setTong(resgetAllBlog.data.totalItems)
+      let to = []
+      for (
+        let index = 1;
+        index <= resgetAllBlog.data.totalItems / 12 + 1;
+        index++
+      ) {
+        to.push(index)
+      }
+      setT(to)
+    }
+  }
 
   useEffect(() => {
-    // initValue
-    fetchListBlog()
-  }, [])
-
-  const fetchListBlog = () => {
-    axiosInstance
-      .get('api/tintuc')
-      .then((res) => {
-        const data = res.data
-        // console.log('data res: ', data.data.tinTucs)
-        setListBlog(DATA_DEMO)
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-  }
+    fetchData()
+  }, [page])
 
   const handleCloseDialog = () => {
     setOpenDialog(false)
     setActiveItem(null)
   }
-  const handleSubmitDialog = (data) => {
-    var bodyFormData = new FormData()
-    bodyFormData.append('anhdaidien', data.file)
-    bodyFormData.append('tieude', data.title)
-    bodyFormData.append('tieudecon', data.subtitle)
-    bodyFormData.append('chitiet', data.description)
-    bodyFormData.append('luotxem', 1)
+  // const handleSubmitDialog = async (data) => {
 
-    axiosInstance
-      .post('api/tintuc', bodyFormData, { headers: { 'Content-Type': 'multipart/form-data' } })
-      .then((res) => {
-        // const data = res.data
-        // console.log('data res: ', data)
-        handleCloseDialog()
-      })
-      .catch((e) => {
-        console.log(e)
-      })
+  //   var bodyFormData = new FormData()
+  //   bodyFormData.append('anhdaidien', data.anhdaidien)
+  //   bodyFormData.append('tieude', data.tieude)
+  //   bodyFormData.append('tieudecon', data.tieudecon)
+  //   bodyFormData.append('chitiet', data.chitiet)
+  //   bodyFormData.append('motangan', data.motangan)
+  //   bodyFormData.append('ngaytaotintuc', ngaytaotintuc)
+
+  //   axiosInstance
+  //     .post('api/tintuc', bodyFormData, {
+  //       headers: { 'Content-Type': 'application/json' },
+  //     })
+  //     .then((res) => {
+  //       // const data = res.data
+  //       // console.log('data res: ', data)
+  //       handleCloseDialog()
+  //     })
+  //     .catch((e) => {
+  //       console.log(e)
+  //     })
+  // }
+
+  const handleSubmitDialog = async (data) => {
+    console.log('data submit: ', data)
+    var body = {
+      anhdaidien: data.anhdaidien,
+      tieude: data.tieude,
+      tieudecon: data.tieudecon,
+      chitiet: data.chitiet,
+      motangan: data.motangan,
+      ngaytaotintuc: data.ngaytaotintuc,
+    }
+    const rescreateUser = await api.taoTinTuc(body)
+    handleCloseDialog()
+    fetchData()
   }
 
   const handleOpenDialog = () => {
@@ -419,33 +486,66 @@ const NewsManagement = () => {
 
   const submitSearch = () => {
     console.log('dataFilter: ', dataFilter)
+    fetchData()
   }
 
   const handleChangePage = (e, val) => {
     console.log('call api: ', val)
-    setPaginator({ ...paginator, current: val })
+    // setPaginator({ ...paginator, current: val });
+    if (val <= tong / 12 + 1) {
+      setPage(val)
+    }
   }
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
-
-      <ControlFilter
-        dataFilter={dataFilter}
-        setDataFilter={setDataFilter}
-        handleOpenDialog={handleOpenDialog}
-        submitSearch={submitSearch}
-      />
-
+      <Grid container spacing={6}>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Box sx={{ display: 'flex', marginBottom: 3 }}>
+            <MDBox pr={1} sx={{ width: '300px' }}>
+              <TextField
+                sx={{ width: '100%' }}
+                label="Nhập tìm kiếm"
+                autoComplete="off"
+                value={dataFilter.searchText}
+                onChange={(e) =>
+                  setDataFilter({ ...dataFilter, searchText: e.target.value })
+                }
+              />
+            </MDBox>
+            <MDButton variant="outlined" color="primary" onClick={submitSearch}>
+              Tìm kiếm
+            </MDButton>
+          </Box>
+          <MDButton
+            variant="outlined"
+            color="primary"
+            onClick={handleOpenDialog}
+          >
+            Thêm tin tức
+          </MDButton>
+        </Grid>
+      </Grid>
       <RenderNews
-        list_news={listBlog}
+        list_news={dsTinTuc}
         handleOpenDialog={handleOpenDialog}
         setActiveItem={setActiveItem}
+        fetchData={fetchData}
       />
       <Pagination
-        sx={{ mt: 2 }}
-        count={paginator.total}
-        page={paginator.current}
+        count={tong / 12 + 1}
+        page={page}
         onChange={handleChangePage}
+        style={{ marginTop: 12 }}
       />
       <DialogUpdateBlog
         activeItem={activeItem}

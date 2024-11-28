@@ -8,6 +8,10 @@ import PDFMap from 'pages/PDFMap'
 import SatelliteImage from 'pages/SatelliteImage'
 import FeedBack from 'pages/feedback'
 import UserManagement from 'pages/user-management'
+import ReportManagement from 'pages/ReportManagement/report'
+import PhananhManagement from 'pages/PhanAnh/phananh'
+import NhatKiManagement from 'pages/NhatkiManagement/nhatki'
+import UpdateInfoManagement from 'pages/ThongTinCapNhat'
 // import Tables from 'layouts/tables'
 // import Billing from 'layouts/billing'
 // import Notifications from 'layouts/notifications'
@@ -22,7 +26,10 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf'
 import SatelliteAltIcon from '@mui/icons-material/SatelliteAlt'
 import TextSnippetIcon from '@mui/icons-material/TextSnippet'
 import Icon from '@mui/material/Icon'
-
+import BookIcon from '@mui/icons-material/Book'
+import ReportIcon from '@mui/icons-material/Report'
+import InfoIcon from '@mui/icons-material/Info'
+import RateReviewIcon from '@mui/icons-material/RateReview'
 const old_routes = [
   {
     type: 'collapse',
@@ -74,22 +81,14 @@ const new_routes = [
     route: '/user-management',
     component: <UserManagement />,
   },
-  // {
-  //   type: 'collapse',
-  //   name: 'Tin tức',
-  //   key: 'news-management',
-  //   icon: <Icon fontSize="small">newspaper</Icon>,
-  //   route: '/news-management',
-  //   component: <NewsManagement />,
-  // },
-  // {
-  //   type: 'collapse',
-  //   name: 'Quản lí tài liệu',
-  //   key: 'document-management',
-  //   icon: <TextSnippetIcon fontSize="small" />,
-  //   route: '/document-management',
-  //   component: <DocumentManagement />,
-  // },
+  {
+    type: 'collapse',
+    name: 'Tin tức',
+    key: 'news-management',
+    icon: <Icon fontSize="small">newspaper</Icon>,
+    route: '/news-management',
+    component: <NewsManagement />,
+  },
   // {
   //   type: 'collapse',
   //   name: 'Lớp dữ liệu bản đồ',
@@ -114,14 +113,38 @@ const new_routes = [
     route: '/pdf-map',
     component: <PDFMap />,
   },
-  // {
-  //   type: 'collapse',
-  //   name: 'Phản hồi',
-  //   key: 'feedback',
-  //   icon: <FeedbackIcon fontSize="small" />,
-  //   route: '/feedback',
-  //   component: <FeedBack />,
-  // },
+  {
+    type: 'collapse',
+    name: 'Phản ánh',
+    key: 'feedback',
+    icon: <FeedbackIcon fontSize="small" />,
+    route: '/feedback',
+    component: <FeedBack />,
+  },
+  {
+    type: 'collapse',
+    name: 'Văn bản, Báo cáo',
+    key: 'report',
+    icon: <BookIcon fontSize="small" />,
+    route: '/report',
+    component: <ReportManagement />,
+  },
+  {
+    type: 'collapse',
+    name: 'Nhật kí',
+    key: 'nhatki',
+    icon: <RateReviewIcon fontSize="small" />,
+    route: '/nhatki',
+    component: <NhatKiManagement />,
+  },
+  {
+    type: 'collapse',
+    name: 'Thông tin cập nhật',
+    key: 'thongtincapnhat',
+    icon: <InfoIcon fontSize="small" />,
+    route: '/thongtincapnhat',
+    component: <UpdateInfoManagement />,
+  },
   // {
   //   type: 'collapse',
   //   name: 'Ảnh vệ tinh',

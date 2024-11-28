@@ -212,12 +212,12 @@ const DialogUpdateBlog = ({ activeItem, isOpen, handleClose, handleSubmit }) => 
       aria-labelledby="scroll-dialog-title"
       aria-describedby="scroll-dialog-description"
     >
-      <DialogTitle>{formData?.id ? 'Update Report' : 'New Report'}</DialogTitle>
+      <DialogTitle>{formData?.id ? 'Cập nhật thông tin' : 'Thêm mới thông tin'}</DialogTitle>
       <DialogContent dividers>
         <MDBox sx={{ width: '100%', mt: 2 }}>
           <TextField
             fullWidth
-            label="Title"
+            label="Tiêu đề"
             variant="outlined"
             value={formData?.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -227,37 +227,37 @@ const DialogUpdateBlog = ({ activeItem, isOpen, handleClose, handleSubmit }) => 
           <FormControl fullWidth>
             <TextField
               select
-              label="Type of file"
+              label="Loại tệp"
               onChange={(e) => setFormData({ ...formData, type: e.target.value })}
               value={formData?.type}
               className="custom-text-select"
             >
-              <MenuItem value={1}>Document</MenuItem>
-              <MenuItem value={2}>Report</MenuItem>
+              <MenuItem value={1}>Tài liệu</MenuItem>
+              <MenuItem value={2}>Báo cáo</MenuItem>
             </TextField>
           </FormControl>
         </MDBox>
         <MDBox sx={{ mt: 2 }}>
           <Typography gutterBottom variant="title2" component="div">
-            File document or report
+            Tệp tài liệu hoặc báo cáo
           </Typography>
           <FileUpload
-            title="Drag or drop some files here"
+            title="Kéo hoặc thả một số tệp vào đây"
             multiple={false}
             // accept={['img', 'png', 'image', 'pdf']}
             value={files}
             onChange={setFiles}
             buttonProps={{ variant: 'contained', sx: { color: '#fff' } }}
-            buttonText="Upload File"
+            buttonText="Tải tệp lên"
             maxFiles={1}
           />
         </MDBox>
       </DialogContent>
       <DialogActions>
         <Button color="secondary" onClick={internalClose}>
-          Cancel
+          Hủy
         </Button>
-        <Button onClick={internalSubmit}>Submit</Button>
+        <Button onClick={internalSubmit}>Lưu</Button>
       </DialogActions>
     </Dialog>
   )
