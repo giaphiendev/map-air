@@ -27,13 +27,21 @@ import MDInput from 'components/MDInput'
 import MDTypography from 'components/MDTypography'
 import axiosInstance from 'services/axios'
 import api from 'api'
+import { Modal } from '@mui/material'
 
-function MediaCard({ item, handleOpenDialog, setActiveItem, fetchData }) {
+function MediaCard({
+  item,
+  handleOpenDialog,
+  setActiveItem,
+  fetchData,
+  onOpenDialog,
+}) {
   const onDeleteItem = async (item) => {
     console.log(item)
     const rescreateUser = await api.xoaTinTuc(item.idtintuc)
     fetchData()
   }
+
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
@@ -67,11 +75,13 @@ function MediaCard({ item, handleOpenDialog, setActiveItem, fetchData }) {
             WebkitBoxOrient: 'vertical',
           }}
         >
-          {item.chitiet}
+          {item.tieudecon}
         </Typography>
       </CardContent>
       <CardActions sx={{ justifyContent: 'space-around' }}>
-        <Button size="small">Xem thêm</Button>
+        <Button size="small" onClick={() => onOpenDialog(item)}>
+          Xem thêm
+        </Button>
         <Button
           size="small"
           onClick={() => {
@@ -84,26 +94,6 @@ function MediaCard({ item, handleOpenDialog, setActiveItem, fetchData }) {
         <Button onClick={() => onDeleteItem(item)} size="small">
           Xoá
         </Button>
-        <Box>
-          {item.view > 0 ? (
-            <Typography
-              variant="body2"
-              color="secondary"
-              sx={{ display: 'flex', alignItems: 'center', fontSize: '14px' }}
-            >
-              {item.view}
-              <VisibilityIcon fontSize="inherit" sx={{ ml: '3px' }} />
-            </Typography>
-          ) : (
-            <Typography
-              variant="body2"
-              color="secondary"
-              sx={{ display: 'flex', alignItems: 'center', fontSize: '14px' }}
-            >
-              <VisibilityOffIcon fontSize="inherit" />
-            </Typography>
-          )}
-        </Box>
       </CardActions>
     </Card>
   )
@@ -114,6 +104,7 @@ const RenderNews = ({
   handleOpenDialog,
   setActiveItem,
   fetchData,
+  onOpenDialog,
 }) => {
   return (
     <Grid
@@ -128,6 +119,7 @@ const RenderNews = ({
             handleOpenDialog={handleOpenDialog}
             setActiveItem={setActiveItem}
             fetchData={fetchData}
+            onOpenDialog={onOpenDialog}
           />
         </Grid>
       ))}
@@ -407,7 +399,8 @@ const NewsManagement = () => {
   const [dataFilter, setDataFilter] = useState({
     searchText: '',
   })
-
+  const [isOpenReadMore, setIsOpenReadMore] = useState(false)
+  const [content, setContent] = useState({})
   const [dsTinTuc, setDsTinTuc] = useState([])
   const [limit, setLimit] = useState(12)
   const [page, setPage] = useState(1)
@@ -497,6 +490,27 @@ const NewsManagement = () => {
     }
   }
 
+  const onOpenDialog = (item) => {
+    setIsOpenReadMore(true)
+    setContent(item)
+  }
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 1000,
+    bgcolor: 'background.paper',
+    border: '2px solid #e1e1e1',
+    boxShadow: 24,
+    pt: 2,
+    px: 4,
+    pb: 3,
+    overflow: 'auto',
+    height: '80vh',
+    padding: '20px 28px',
+  }
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -540,6 +554,7 @@ const NewsManagement = () => {
         handleOpenDialog={handleOpenDialog}
         setActiveItem={setActiveItem}
         fetchData={fetchData}
+        onOpenDialog={onOpenDialog}
       />
       <Pagination
         count={tong / 12 + 1}
@@ -554,6 +569,24 @@ const NewsManagement = () => {
         handleClose={handleCloseDialog}
         handleSubmit={handleSubmitDialog}
       />
+      <Modal
+        open={isOpenReadMore}
+        onClose={() => setIsOpenReadMore(false)}
+        aria-labelledby="child-modal-title"
+        aria-describedby="child-modal-description"
+      >
+        <Box sx={{ ...style, width: 1000, overflow: 'auto' }}>
+          <h2 id="child-modal-title">{content.tieude}</h2>
+          <p style={{ fontSize: 12, color: '#6e6e6e' }}>
+            {content.ngaytaotintuc}{' '}
+          </p>
+          {/* <p id="child-modal-description">{content.tieudecon}</p>
+          <p id="child-modal-description">{content.motangan}</p> */}
+          <p id="child-modal-description">{content.chitiet}</p>
+
+          <Button onClick={() => setIsOpenReadMore(false)}>Đóng</Button>
+        </Box>
+      </Modal>
     </DashboardLayout>
   )
 }

@@ -12,6 +12,8 @@ import ReportManagement from 'pages/ReportManagement/report'
 import PhananhManagement from 'pages/PhanAnh/phananh'
 import NhatKiManagement from 'pages/NhatkiManagement/nhatki'
 import UpdateInfoManagement from 'pages/ThongTinCapNhat'
+import DiemQuanTracManagement from 'pages/DiemKhoanTrac'
+
 // import Tables from 'layouts/tables'
 // import Billing from 'layouts/billing'
 // import Notifications from 'layouts/notifications'
@@ -29,6 +31,7 @@ import Icon from '@mui/material/Icon'
 import BookIcon from '@mui/icons-material/Book'
 import ReportIcon from '@mui/icons-material/Report'
 import InfoIcon from '@mui/icons-material/Info'
+import AddLocationIcon from '@mui/icons-material/AddLocation'
 import RateReviewIcon from '@mui/icons-material/RateReview'
 const old_routes = [
   {
@@ -112,6 +115,14 @@ const new_routes = [
     icon: <PictureAsPdfIcon fontSize="small" />,
     route: '/pdf-map',
     component: <PDFMap />,
+  },
+  {
+    type: 'collapse',
+    name: 'Điểm quan trắc',
+    key: 'diemquantrac',
+    icon: <AddLocationIcon fontSize="small" />,
+    route: '/diemquantrac',
+    component: <DiemQuanTracManagement />,
   },
   {
     type: 'collapse',

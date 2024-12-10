@@ -57,7 +57,7 @@ const api = {
   getBaoCao: (params) =>
     request.get(`http://103.130.212.145:42521/api/baocao?${params}`),
   createBaoCao: (data) =>
-    request.post(`http://103.130.212.145:42521/api/baocao`, data),
+    request.postFormData(`http://103.130.212.145:42521/api/baocao`, data),
   xoaBaoCao: (id) =>
     request.post(`http://103.130.212.145:42521/api/baocao/delete/${id}`),
   delelteUser: (id) =>
@@ -67,5 +67,23 @@ const api = {
     request.get(`http://103.130.212.145:42521/api/phananh?${params}`),
   xoaPhanHoi: (id) =>
     request.post(`http://103.130.212.145:42521/api/phananh/delete/${id}`),
+  getDiemKhoanTrac: (params) =>
+    request.get(
+      `http://103.130.212.145:42521/api/bando/diemquantrac/diemQuanTrac?${params}`
+    ),
+  themDiemKhoanTrac: (data) =>
+    request.post(
+      `http://103.130.212.145:42521/api/bando/diemquantrac/themDiemQuanTrac`,
+      data
+    ),
+  suaDiemKhoanTrac: (id, data) =>
+    request.post(
+      `http://103.130.212.145:42521/api/bando/diemquantrac/updateDiemQuanTrac/${id}`,
+      data
+    ),
+  xoaDiemKhoanTrac: (id) =>
+    request.post(
+      `http://103.130.212.145:42521/api/bando/diemquantrac/deleteDiemQuanTrac/${id}`
+    ),
 }
 export default api

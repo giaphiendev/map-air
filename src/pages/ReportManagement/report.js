@@ -43,8 +43,9 @@ import logoAtlassian from 'assets/images/small-logos/logo-atlassian.svg'
 import logoInvesion from 'assets/images/small-logos/logo-invision.svg'
 import logoSlack from 'assets/images/small-logos/logo-slack.svg'
 import logoSpotify from 'assets/images/small-logos/logo-spotify.svg'
-import api from 'api'
-import { Button } from '@mui/material'
+import api from '../../api'
+import { Button, Typography } from '@mui/material'
+import FileUpload from 'react-material-file-upload'
 
 const dataDemo = () => {
   let list_img = [
@@ -126,7 +127,14 @@ function CustomDataTable({
                 {item.tenbaocao}
               </MybodyCell>
 
-              <MybodyCell align={'left'}>{item.uribaocao}</MybodyCell>
+              <MybodyCell align={'left'}>
+                <a
+                  href={`http://103.130.212.145:42521/api/public/${item.uribaocao}`}
+                  target="_blank"
+                >
+                  {item.uribaocao}
+                </a>
+              </MybodyCell>
 
               <MybodyCell align={'center'}>
                 <MDTypography
@@ -148,7 +156,7 @@ function CustomDataTable({
                   color="text"
                   fontWeight="medium"
                 >
-                  {item.useridnoibaocao}
+                  {item.firstname} {item.lastname}
                 </MDTypography>
               </MybodyCell>
 
@@ -183,7 +191,14 @@ function CustomDataTable({
   )
 }
 
-function DialogCreateUser({ activeItem, isOpen, handleClose, handleSubmit }) {
+function DialogCreateUser({
+  activeItem,
+  isOpen,
+  handleClose,
+  handleSubmit,
+  files,
+  setFiles,
+}) {
   const [formData, setFormData] = useState({
     tenbaocao: '',
     uribaocao: '',
@@ -216,7 +231,7 @@ function DialogCreateUser({ activeItem, isOpen, handleClose, handleSubmit }) {
 
   const internalSubmit = () => {
     // validate
-    if (!handleSubmitForm()) return
+    // if (!handleSubmitForm()) return
     handleSubmit({ ...formData })
     setFormData({})
   }
@@ -228,7 +243,7 @@ function DialogCreateUser({ activeItem, isOpen, handleClose, handleSubmit }) {
   return (
     <Dialog open={isOpen} onClose={internalClose}>
       <DialogTitle>
-        {formData?.id ? 'Cập nhật thông tin' : 'Thêm mới thông tin'}
+        {formData?.idbaocao ? 'Cập nhật thông tin' : 'Thêm mới thông tin'}
       </DialogTitle>
       <DialogContent sx={{ width: '500px' }}>
         <DialogContentText>Nhập thông tin của bạn ở đây.</DialogContentText>
@@ -249,20 +264,6 @@ function DialogCreateUser({ activeItem, isOpen, handleClose, handleSubmit }) {
         <FormControl sx={{ paddingBottom: '10px' }} fullWidth>
           <TextField
             margin="dense"
-            label="URI báo cáo"
-            value={formData.uribaocao}
-            type="text"
-            fullWidth
-            variant="standard"
-            error={!!validateForm.uribaocao}
-            onChange={(e) =>
-              setFormData({ ...formData, uribaocao: e.target.value })
-            }
-          />
-        </FormControl>
-        <FormControl sx={{ paddingBottom: '10px' }} fullWidth>
-          <TextField
-            margin="dense"
             label=""
             value={formData.ngaytaobaocao}
             type="date"
@@ -274,7 +275,21 @@ function DialogCreateUser({ activeItem, isOpen, handleClose, handleSubmit }) {
             }
           />
         </FormControl>
-
+        <MDBox sx={{ mt: 2 }}>
+          <Typography gutterBottom variant="title2" component="div">
+            File báo cáo pdf
+          </Typography>
+          <FileUpload
+            title="Kéo hoặc thả tệp vào đây"
+            multiple={false}
+            // accept={['img', 'png', 'image', 'pdf']}
+            value={files}
+            onChange={setFiles}
+            buttonProps={{ variant: 'contained', sx: { color: '#fff' } }}
+            buttonText="Tải tệp lên"
+            maxFiles={1}
+          />
+        </MDBox>
         {/* <MDBox sx={{ paddingBottom: '10px' }}>
           <FormControl
             fullWidth
@@ -324,6 +339,7 @@ function ReportManagement() {
   const [page, setPage] = useState(1)
   const [tong, setTong] = useState(1)
   const [t, setT] = useState([])
+  const [files, setFiles] = useState([])
 
   const fetchData = async () => {
     const resgetAllUser = await api.getBaoCao(
@@ -353,13 +369,12 @@ function ReportManagement() {
     setActiveItem(null)
   }
   const handleSubmitDialog = async (data) => {
-    console.log('data submit: ', data)
-    var body = {
-      tenbaocao: data.tenbaocao,
-      uribaocao: data.uribaocao,
-      ngaytaobaocao: data.ngaytaobaocao,
-    }
-    const rescreateUser = await api.createBaoCao(body)
+    const formData = new FormData()
+    formData.append('tenbaocao', data.tenbaocao)
+    formData.append('ngaytaobaocao', data.ngaytaobaocao)
+    formData.append('baocao', files[0])
+
+    const rescreateUser = await api.createBaoCao(formData)
     handleCloseDialog()
     fetchData()
   }
@@ -461,6 +476,8 @@ function ReportManagement() {
           activeItem={activeItem}
           handleClose={handleCloseDialog}
           handleSubmit={handleSubmitDialog}
+          setFiles={setFiles}
+          files={files}
         />
       )}
     </DashboardLayout>
